@@ -126,6 +126,15 @@ broker:
       # -- Set this to true to allow status badges to be embedded in README files without requiring a hardcoded password.
       enablePublicBadgeAccess: false
 
+  # -- Pact Broker [Affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
+  affinity: {}
+
+  # -- Pact Broker [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
+  tolerations: []
+
+  # -- Pact Broker [Node Selector](https://kubernetes.io/docs/user-guide/node-selection/)
+  nodeSelector: {}
+
   # -- Pact Broker [resource requests and limits](https://kubernetes.io/docs/user-guide/compute-resources/)
   resources:
 
