@@ -114,6 +114,18 @@ spec:
               value: {{ .Values.broker.config.basicAuth.enablePublicBadgeAccess | quote }}
           resources:
             {{- toYaml .Values.broker.resources | nindent 12 }}
+          {{- if .Values.nodeSelector }}
+          nodeSelector:
+          {{ toYaml .Values.nodeSelector | indent 8 }}
+          {{- end }}
+          {{- if .Values.tolerations }}
+          tolerations:
+          {{ toYaml .Values.tolerations | indent 8 }}
+          {{- end }}
+          {{- if .Values.affinity }}
+          affinity:
+          {{ toYaml .Values.affinity | indent 8 }}
+          {{- end }}
           {{- if .Values.broker.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.broker.livenessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
