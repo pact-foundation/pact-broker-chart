@@ -69,18 +69,80 @@ broker:
     # -- Set Pact Broker container's Security Context runAsNonRoot
     runAsNonRoot: true
 
-  # -- Pact Broker Config
+  # -- Pact Broker Config, mostly set with the [default values](https://docs.pact.io/pact_broker/configuration/settings).
   config:
+    # -- The application log level
+    # Allowed values: debug, info, warn, error, fatal
+    logLevel: info
 
-    # -- If set to true, SSL verification will be disabled for the HTTP requests made by the webhooks
-    disable_ssl: false
+    # -- The application log format. Can be any value supported by Semantic Logger.
+    # Allowed values: default, json, color
+    logFormat: default
+
+    # -- Enable this setting to print the entire request and response to the logs at debug level.
+    # Do not leave this on permanently, as it will have performance and security issues.
+    # Ensure the application log_level is set to debug when this setting is enabled.
+    httpDebugLoggingEnabled: false
+
+    # -- Set to true to hide the messages in the logs about Pactflow
+    hidePactflowMessages: true
+
+    # -- The Postgresql ssl mode.
+    # Allowed values: disable, allow, prefer, require, verify-ca, verify-full
+    databaseSslmode: prefer
+
+    # -- The log level that will be used when the SQL query statements are logged.
+    # Allowed values: none, debug, info, warn, error, fatal
+    sqlLogLevel: none
+
+    # -- The number of seconds after which to log an SQL query at warn level. Use this for detecting slow queries.
+    sqlLogWarnDuration: 5
+
+    # -- When enabled it logs source path that caused SQL query.
+    sqlEnableCallerLogging: false
+
+    # -- The maximum size of the connection pool (4 connections by default on most databases)
+    databaseMaxConnections: 4
+
+    # -- The number of seconds to wait if a connection cannot be acquired before raising an error
+    databasePoolTimeout: 5
+
+    # -- Setting the max retries to a non-zero number will allow it to retry the connection the configured number of times, waiting 3 seconds between attempts.
+    databaseConnectMaxRetries: 0
+
+    # -- Whether or not to run the database schema migrations on start up. It is recommended to set this to true.
+    autoMigrateDb: true
+
+    # -- Whether or not to run the database data migrations on start up. It is recommended to set this to true.
+    autoMigrateDbData: true
+
+    # -- If true, will not raise an error if a database migration is recorded in the database that does not have an equivalent file in the codebase.
+    # If this is true, an older version of the code may be used with a newer version of the database, however, data integrity issues may occur.
+    allowMissingMigrationFiles: true
+
+    # -- The number of seconds after which an SQL query will be aborted. Only supported for Postgresql connections.
+    databaseStatementTimeout: 15
+
+    # -- The number of seconds after which the SQL queries used for the metrics endpoint will be aborted.
+    # This is configurable separately from the standard database_statement_timeout as it may need to be significantly longer than the desired value for standard queries.
+    metricsSqlStatementTimeout: 30
+
+    # The number of seconds after which to check the health of a connection from a connection pool before passing it to the application.
+    databaseConnectionValidationTimeout: 3600
 
     # -- Pact Broker Basic Authentication
     basicAuth:
 
+      # -- Set to true if you want public read access, but still require credentials for writing.
+      #
+      allowPublicRead: false
+
       # -- Set to true if you want the heartbeat endpoint to be publicly accessible.
       # This will have to be true if you have enabled basic auth.
       publicHeartbeat: true
+
+      # -- Set this to true to allow status badges to be embedded in README files without requiring a hardcoded password.
+      enablePublicBadgeAccess: false
 
       # -- Pact Broker Basic Authentication Credentials For Write user
       writeUser:
@@ -118,13 +180,95 @@ broker:
         # -- The key to which holds the value of the password within the existingSecret
         existingSecretPasswordKey: ""
 
-      # -- Set to true if you want public read access, but still require credentials for writing.
-      #
-      allowPublicRead: false
+    # -- The schedule of seconds to wait between webhook execution attempts.
+    # The default schedule is 10 sec, 1 min, 2 min, 5 min, 10 min, 20 min (38 minutes in total).
+    webhookRetrySchedule: 10 60 120 300 600 1200
 
+    # -- The allowed HTTP methods for webhooks.
+    # It is highly recommended that only POST requests are allowed to ensure that webhooks cannot be used to retrieve sensitive information from hosts within the same network.
+    webhookHttpMethodWhitelist: POST
 
-      # -- Set this to true to allow status badges to be embedded in README files without requiring a hardcoded password.
-      enablePublicBadgeAccess: false
+    # -- If webhook call returns the response with an HTTP code that is listed in the success codes then the operation is considered a success,
+    # otherwise the webhook will be re-triggered based on the webhook_retry_schedule configuration.
+    webhookHttpCodeSuccess: "200 201 202 203 204 205 206"
+
+    # -- The allowed URL schemes for webhooks.
+    webhookSchemeWhitelist: https
+
+    # -- A list of hosts, network ranges, or host regular expressions.
+    webhookHostWhitelist:
+
+    # -- If set to true, SSL verification will be disabled for the HTTP requests made by the webhooks
+    disable_ssl: false
+
+    # -- Base URLs can be configured for architectures that use gateways or proxies that allow the same Pact Broker instance to be addressed with different base URLs.
+    #  The application may run correctly without this attribute, however,
+    # it is strongly recommended to set it when deploying the Pact Broker to production as it prevents cache poisoning security vulnerabilities
+    baseUrls:
+
+    # -- The URL of the shields.io server used to generate the README badges.
+    shieldsIoBaseUrl: https://img.shields.io
+
+    # -- The method by which the badges are generated.
+    # Allowed values: redirect, proxy
+    badgeProviderMode: redirect
+
+    # -- Whether or not to enable the diagnostic endpoints at /diagnostic/status/heartbeat and "diagnostic/status/dependencies
+    enableDiagnosticEndpoints: true
+
+    # -- Whether or not to enable the embedded HAL Browser.
+    useHalBrowser: true
+
+    # -- When a pact is published, the consumer, provider and consumer version resources are automatically created.
+    # To prevent a pacticipant (consumer or provider) being created multiple times with slightly different name variants (eg. FooBar/foo-bar/foo bar/Foo Bar Service),
+    # a check is performed to determine if a new pacticipant name is likely to be a duplicate of any existing applications.
+    # If it is deemed similar enough to an existing name, a 409 will be returned.
+    checkForPotentialDuplicatePacticipantNames: true
+
+    # -- When true and a tag is created, if there is an environment with the name of the newly created tag,
+    # a deployed version is also created for the pacticipant version.
+    createDeployedVersionsForTags: true
+
+    # -- When true, the first tag applied to a version within the use_first_tag_as_branch_time_limit (10 seconds) will be used to populate the branch property of the version.
+    useFirstTagAsBranch: true
+
+    # -- When true and a pacticipant version is created with a tag or a branch that matches one of the names in main_branch_candidates,
+    # the mainBranch property is set for that pacticipant if it is not already set.
+    autoDetectMainBranch: true
+
+    # -- An array of potential main branch names used when automatically detecting the main branch for a pacticipant.
+    mainBranchCandidates: "develop main master"
+
+    # -- Whether or not to allow the pact content for an existing consumer version to be modified.
+    # It is strongly recommended that this is set to false, as allowing modification makes the results of can-i-deploy unreliable.
+    allowDangerousContractModification: false
+
+    # -- The maximum amount of time in seconds to attempt to generate the diff between two pacts before aborting the request.
+    pactContentDiffTimeout: 15
+
+    # -- A list of features to enable in the Pact Broker for beta testing before public release.
+    features:
+
+    # -- Pact Broker [automatic data cleanup](https://docs.pact.io/pact_broker/docker_images/pactfoundation#automatic-data-clean-up)
+    databaseClean:
+
+      # -- Set to true to enable the automatic data clean up.
+      enabled: false
+
+      # -- Set to a cron schedule that will run when your Broker is under the least operational load.
+      cronSchedule: 15 2 * * *
+
+      # -- The maximum number of records to delete at a time for each of the removable data categories.
+      deletionLimit: 500
+
+      # -- The maximum number of days to keep "overwritten" data.
+      overwrittenDataMaxAge: 90
+
+      # -- A JSON string containing a list of the "keep" selectors.
+      keepVersionSelectors: '[{ "max_age": 180 }]'
+
+      # -- Defaults to false. Set to true to see the output of what would have been deleted if the task had run.
+      dryRun: false
 
   # -- Pact Broker [Affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
   affinity: {}
@@ -296,7 +440,6 @@ externalDatabase:
 
 # -- Service Account Configuration
 serviceAccount:
-
 
   # -- Enable the creation of a ServiceAccount for Pact Broker pods
   create: true
