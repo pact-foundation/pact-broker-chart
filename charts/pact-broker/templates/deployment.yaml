@@ -51,12 +51,31 @@ spec:
               containerPort: {{ .Values.broker.containerPorts.https }}
               protocol: TCP
           env:
-            - name: PACT_BROKER_PUBLIC_HEARTBEAT
-              value: {{ .Values.broker.config.basicAuth.publicHeartbeat | quote }}
-            - name: PACT_BROKER_PORT
-              value: {{ .Values.broker.containerPorts.http | quote }}
-            - name: PACT_BROKER_DISABLE_SSL_VERIFICATION
-              value: {{ .Values.broker.config.disable_ssl | quote }}
+            # Database clean up
+            {{- if .Values.broker.config.databaseClean.enabled }}
+            - name: PACT_BROKER_DATABASE_CLEAN_ENABLED
+              value: {{ .Values.broker.config.databaseClean.enabled | quote }}
+            - name: PACT_BROKER_DATABASE_CLEAN_CRON_SCHEDULE
+              value: {{ .Values.broker.config.databaseClean.cronSchedule | quote }}
+            - name: PACT_BROKER_DATABASE_CLEAN_DELETION_LIMIT
+              value: {{ .Values.broker.config.databaseClean.deletionLimit | quote }}
+            - name: PACT_BROKER_DATABASE_CLEAN_OVERWRITTEN_DATA_MAX_AGE
+              value: {{ .Values.broker.config.databaseClean.overwrittenDataMaxAge | quote }}
+            - name: PACT_BROKER_DATABASE_CLEAN_KEEP_VERSION_SELECTORS
+              value: {{ .Values.broker.config.databaseClean.keepVersionSelectors | quote }}
+            - name: PACT_BROKER_DATABASE_CLEAN_DRY_RUN
+              value: {{ .Values.broker.config.databaseClean.dryRun | quote }}
+            {{- end}}
+            # Logging
+            - name: PACT_BROKER_LOG_LEVEL
+              value: {{ .Values.broker.config.logLevel | quote }}
+            - name: PACT_BROKER_LOG_FORMAT
+              value: {{ .Values.broker.config.logFormat | quote }}
+            - name: PACT_BROKER_HTTP_DEBUG_LOGGING_ENABLED
+              value: {{ .Values.broker.config.httpDebugLoggingEnabled | quote }}
+            - name: PACT_BROKER_HIDE_PACTFLOW_MESSAGES
+              value: {{ .Values.broker.config.hidePactflowMessages | quote }}
+            # Database
             - name: PACT_BROKER_DATABASE_ADAPTER
               value: {{ include "broker.databaseAdapter" . }}
             - name: PACT_BROKER_DATABASE_HOST
@@ -72,6 +91,33 @@ spec:
                 secretKeyRef:
                   name: {{ include "broker.databaseSecretName" . }}
                   key: {{ include "broker.databaseSecretKey" . }}
+            - name: PACT_BROKER_DATABASE_SSLMODE
+              value: {{ .Values.broker.config.databaseSslmode | quote }}
+            - name: PACT_BROKER_SQL_LOG_LEVEL
+              value: {{ .Values.broker.config.sqlLogLevel | quote }}
+            - name: PACT_BROKER_SQL_LOG_WARN_DURATION
+              value: {{ .Values.broker.config.sqlLogWarnDuration | quote }}
+            - name: PACT_BROKER_SQL_ENABLE_CALLER_LOGGING
+              value: {{ .Values.broker.config.sqlEnableCallerLogging | quote }}
+            - name: PACT_BROKER_DATABASE_MAX_CONNECTIONS
+              value: {{ .Values.broker.config.databaseMaxConnections | quote }}
+            - name: PACT_BROKER_DATABASE_POOL_TIMEOUT
+              value: {{ .Values.broker.config.databasePoolTimeout | quote }}
+            - name: PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES
+              value: {{ .Values.broker.config.databaseConnectMaxRetries | quote }}
+            - name: PACT_BROKER_AUTO_MIGRATE_DB
+              value: {{ .Values.broker.config.autoMigrateDb | quote }}
+            - name: PACT_BROKER_AUTO_MIGRATE_DB_DATA
+              value: {{ .Values.broker.config.autoMigrateDbData | quote }}
+            - name: PACT_BROKER_ALLOW_MISSING_MIGRATION_FILES
+              value: {{ .Values.broker.config.allowMissingMigrationFiles | quote }}
+            - name: PACT_BROKER_DATABASE_STATEMENT_TIMEOUT
+              value: {{ .Values.broker.config.databaseStatementTimeout | quote }}
+            - name: PACT_BROKER_METRICS_SQL_STATEMENT_TIMEOUT
+              value: {{ .Values.broker.config.metricsSqlStatementTimeout | quote }}
+            - name: PACT_BROKER_DATABASE_CONNECTION_VALIDATION_TIMEOUT
+              value: {{ .Values.broker.config.databaseConnectionValidationTimeout | quote }}
+            # Authentication and authorization
             - name: PACT_BROKER_BASIC_AUTH_USERNAME
               {{- if .Values.broker.config.basicAuth.writeUser.username }}
               value: {{ .Values.broker.config.basicAuth.writeUser.username }}
@@ -110,8 +156,60 @@ spec:
               {{- end }}
             - name: PACT_BROKER_ALLOW_PUBLIC_READ
               value: {{ .Values.broker.config.basicAuth.allowPublicRead | quote }}
+            - name: PACT_BROKER_PUBLIC_HEARTBEAT
+              value: {{ .Values.broker.config.basicAuth.publicHeartbeat | quote }}
             - name: PACT_BROKER_ENABLE_PUBLIC_BADGE_ACCESS
               value: {{ .Values.broker.config.basicAuth.enablePublicBadgeAccess | quote }}
+            # Webhooks
+            - name: PACT_BROKER_WEBHOOK_RETRY_SCHEDULE
+              value: {{ .Values.broker.config.webhookRetrySchedule | quote }}
+            - name: PACT_BROKER_WEBHOOK_HTTP_METHOD_WHITELIST
+              value: {{ .Values.broker.config.webhookHttpMethodWhitelist | quote }}
+            - name: PACT_BROKER_WEBHOOK_HTTP_CODE_SUCCESS
+              value: {{ .Values.broker.config.webhookHttpCodeSuccess | quote }}
+            - name: PACT_BROKER_WEBHOOK_SCHEME_WHITELIST
+              value: {{ .Values.broker.config.webhookSchemeWhitelist | quote }}
+            {{- if .Values.broker.config.webhookHostWhitelist }}
+            - name: PACT_BROKER_WEBHOOK_HOST_WHITELIST
+              value: {{ .Values.broker.config.webhookHostWhitelist | quote }}
+            {{- end }}
+            - name: PACT_BROKER_DISABLE_SSL_VERIFICATION
+              value: {{ .Values.broker.config.disable_ssl | quote }}
+            # Resources
+            - name: PACT_BROKER_PORT
+              value: {{ .Values.broker.containerPorts.http | quote }}
+            {{- if .Values.broker.config.baseUrls }}
+            - name: PACT_BROKER_BASE_URLS
+              value: {{ .Values.broker.config.baseUrls | quote }}
+            {{- end }}
+            - name: PACT_BROKER_SHIELDS_IO_BASE_URL
+              value: {{ .Values.broker.config.shieldsIoBaseUrl | quote }}
+            - name: PACT_BROKER_BADGE_PROVIDER_MODE
+              value: {{ .Values.broker.config.badgeProviderMode | quote }}
+            - name: PACT_BROKER_ENABLE_DIAGNOSTIC_ENDPOINTS
+              value: {{ .Values.broker.config.enableDiagnosticEndpoints | quote }}
+            - name: PACT_BROKER_USE_HAL_BROWSER
+              value: {{ .Values.broker.config.useHalBrowser | quote }}
+            # Domain
+            - name: PACT_BROKER_CHECK_FOR_POTENTIAL_DUPLICATE_PACTICIPANT_NAMES
+              value: {{ .Values.broker.config.checkForPotentialDuplicatePacticipantNames | quote }}
+            - name: PACT_BROKER_CREATE_DEPLOYED_VERSIONS_FOR_TAGS
+              value: {{ .Values.broker.config.createDeployedVersionsForTags | quote }}
+            - name: PACT_BROKER_USE_FIRST_TAG_AS_BRANCH
+              value: {{ .Values.broker.config.useFirstTagAsBranch | quote }}
+            - name: PACT_BROKER_AUTO_DETECT_MAIN_BRANCH
+              value: {{ .Values.broker.config.autoDetectMainBranch | quote }}
+            - name: PACT_BROKER_MAIN_BRANCH_CANDIDATES
+              value: {{ .Values.broker.config.mainBranchCandidates | quote }}
+            - name: PACT_BROKER_ALLOW_DANGEROUS_CONTRACT_MODIFICATION
+              value: {{ .Values.broker.config.allowDangerousContractModification | quote }}
+            - name: PACT_BROKER_PACT_CONTENT_DIFF_TIMEOUT
+              value: {{ .Values.broker.config.pactContentDiffTimeout | quote }}
+            # Miscellaneous
+            {{- if .Values.broker.config.features }}
+            - name: PACT_BROKER_FEATURES
+              value: {{ .Values.broker.config.features | quote }}
+            {{- end }}
           resources:
             {{- toYaml .Values.broker.resources | nindent 12 }}
           {{- if .Values.nodeSelector }}
