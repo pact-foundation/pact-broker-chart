@@ -3,6 +3,29 @@ entries:
   pact-broker:
   - apiVersion: v2
     appVersion: 2.100.0.1
+    created: "2022-08-08T14:27:56.285228627Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: The Pact Broker is an application for sharing for Pact contracts
+      and verification results.
+    digest: 5b83d3eda21136d35f03239c0970e27139d12f03e0db0b3bb3a5132ff187cc91
+    name: pact-broker
+    sources:
+    - https://github.com/pact-foundation/pact_broker
+    type: application
+    urls:
+    - https://github.com/ChrisJBurns/pact-broker-chart/releases/download/pact-broker-0.1.0/pact-broker-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
+    appVersion: 2.100.0.1
     created: "2022-07-15T13:02:13.066818085Z"
     dependencies:
     - condition: postgresql.enabled
@@ -47,4 +70,4 @@ entries:
     urls:
     - https://github.com/ChrisJBurns/pact-broker-chart/releases/download/pact-broker-0.0.1/pact-broker-0.0.1.tgz
     version: 0.0.1
-generated: "2022-07-15T13:02:13.066839985Z"
+generated: "2022-08-08T14:27:56.285496686Z"
