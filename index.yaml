@@ -1,6 +1,32 @@
 apiVersion: v1
 entries:
   pact-broker:
+  - annotations:
+      artifacthub.io/changes: |
+        - "[Fix]: Fixes typo in username field in helpers file."
+    apiVersion: v2
+    appVersion: 2.100.0.1
+    created: "2022-10-01T13:34:08.310299818Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: The Pact Broker is an application for sharing for Pact contracts
+      and verification results.
+    digest: cfab1f34b55782844a3082d31d7148b029fe68a6bca3e3f5d109ac262a5f16e0
+    name: pact-broker
+    sources:
+    - https://github.com/pact-foundation/pact_broker
+    type: application
+    urls:
+    - https://github.com/ChrisJBurns/pact-broker-chart/releases/download/pact-broker-0.1.1/pact-broker-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v2
     appVersion: 2.100.0.1
     created: "2022-08-08T14:27:56.285228627Z"
@@ -70,4 +96,4 @@ entries:
     urls:
     - https://github.com/ChrisJBurns/pact-broker-chart/releases/download/pact-broker-0.0.1/pact-broker-0.0.1.tgz
     version: 0.0.1
-generated: "2022-08-08T14:27:56.285496686Z"
+generated: "2022-10-01T13:34:08.310324018Z"
