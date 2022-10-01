@@ -79,7 +79,7 @@ Return the database name
 Return the Database username
 */}}
 {{- define "broker.databaseUser" -}}
-{{- ternary .Values.postgresql.auth.username .Values.externalDatabase.config.auth.user .Values.postgresql.enabled | quote -}}
+{{- ternary .Values.postgresql.auth.username .Values.externalDatabase.config.auth.username .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
 

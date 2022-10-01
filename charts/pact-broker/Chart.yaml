@@ -2,7 +2,7 @@ apiVersion: v2
 name: pact-broker
 description: The Pact Broker is an application for sharing for Pact contracts and verification results.
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: 2.100.0.1
 dependencies:
   - condition: postgresql.enabled
@@ -16,3 +16,6 @@ dependencies:
     version: 1.x.x
 sources:
   - https://github.com/pact-foundation/pact_broker
+annotations:
+  artifacthub.io/changes: |
+    - "[Fix]: Fixes typo in username field in helpers file."
