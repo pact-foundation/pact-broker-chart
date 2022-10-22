@@ -119,7 +119,7 @@ spec:
               value: {{ .Values.broker.config.databaseConnectionValidationTimeout | quote }}
             # Authentication and authorization
             - name: PACT_BROKER_BASIC_AUTH_ENABLED
-              value: {{ .Values.broker.config.basicAuth.enabled }}
+              value: {{ .Values.broker.config.basicAuth.enabled | quote }}
             - name: PACT_BROKER_BASIC_AUTH_USERNAME
               {{- if .Values.broker.config.basicAuth.writeUser.username }}
               value: {{ .Values.broker.config.basicAuth.writeUser.username }}
