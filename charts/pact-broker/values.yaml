@@ -133,6 +133,10 @@ broker:
     # -- Pact Broker Basic Authentication
     basicAuth:
 
+      # -- Set to true if you basic authentication to be enabled
+      #
+      enabled: true
+
       # -- Set to true if you want public read access, but still require credentials for writing.
       #
       allowPublicRead: false
