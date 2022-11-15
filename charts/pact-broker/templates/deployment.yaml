@@ -120,6 +120,7 @@ spec:
             # Authentication and authorization
             - name: PACT_BROKER_BASIC_AUTH_ENABLED
               value: {{ .Values.broker.config.basicAuth.enabled | quote }}
+            {{- if .Values.broker.config.basicAuth.enabled }}
             - name: PACT_BROKER_BASIC_AUTH_USERNAME
               {{- if .Values.broker.config.basicAuth.writeUser.username }}
               value: {{ .Values.broker.config.basicAuth.writeUser.username }}
@@ -129,6 +130,8 @@ spec:
                   name: {{ .Values.broker.config.basicAuth.writeUser.existingSecret }}
                   key: {{ .Values.broker.config.basicAuth.writeUser.existingSecretUsernameKey }}
               {{- end }}
+            {{- end }}
+            {{- if .Values.broker.config.basicAuth.enabled }}
             - name: PACT_BROKER_BASIC_AUTH_PASSWORD
               {{- if .Values.broker.config.basicAuth.writeUser.password }}
               value: {{ .Values.broker.config.basicAuth.writeUser.password }}
@@ -138,6 +141,8 @@ spec:
                   name: {{ .Values.broker.config.basicAuth.writeUser.existingSecret }}
                   key: {{ .Values.broker.config.basicAuth.writeUser.existingSecretPasswordKey }}
               {{- end }}
+            {{- end }}
+            {{- if .Values.broker.config.basicAuth.enabled }}
             - name: PACT_BROKER_BASIC_AUTH_READ_ONLY_USERNAME
               {{- if .Values.broker.config.basicAuth.readUser.username }}
               value: {{ .Values.broker.config.basicAuth.readUser.username }}
@@ -147,6 +152,8 @@ spec:
                   name: {{ .Values.broker.config.basicAuth.readUser.existingSecret }}
                   key: {{ .Values.broker.config.basicAuth.readUser.existingSecretUsernameKey }}
               {{- end }}
+            {{- end }}
+            {{- if .Values.broker.config.basicAuth.enabled }}
             - name: PACT_BROKER_BASIC_AUTH_READ_ONLY_PASSWORD
               {{- if .Values.broker.config.basicAuth.readUser.password }}
               value: {{ .Values.broker.config.basicAuth.readUser.password }}
@@ -156,6 +163,7 @@ spec:
                   name: {{ .Values.broker.config.basicAuth.readUser.existingSecret }}
                   key: {{ .Values.broker.config.basicAuth.readUser.existingSecretPasswordKey }}
               {{- end }}
+            {{- end }}
             - name: PACT_BROKER_ALLOW_PUBLIC_READ
               value: {{ .Values.broker.config.basicAuth.allowPublicRead | quote }}
             - name: PACT_BROKER_PUBLIC_HEARTBEAT
