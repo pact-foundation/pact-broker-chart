@@ -135,7 +135,7 @@ broker:
 
       # -- Set to true if you basic authentication to be enabled
       #
-      enabled: true
+      enabled: false
 
       # -- Set to true if you want public read access, but still require credentials for writing.
       #
@@ -152,10 +152,10 @@ broker:
       writeUser:
 
         # -- Usermame for write access to the Pact Broker
-        username: "admin"
+        username: ""
 
         # -- Password for write access to the Pact Broker
-        password: "admin"
+        password: ""
 
         # -- Name of an existing Kubernetes secret containing credentials to access the Pact Broker
         existingSecret: ""
@@ -170,10 +170,10 @@ broker:
       readUser:
 
         # -- Usermame for read access to the Pact Broker
-        username: "admin"
+        username: ""
 
         # -- Password for read access to the Pact Broker
-        password: "admin"
+        password: ""
 
         # -- Name of an existing Kubernetes secret containing credentials to access the Pact Broker
         existingSecret: ""
