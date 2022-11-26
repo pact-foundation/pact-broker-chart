@@ -1,8 +1,12 @@
 # Pact Broker Helm Chart
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) ![Release Charts](https://github.com/ChrisJBurns/pact-helm-chart/workflows/Release%20Charts/badge.svg?branch=master)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) ![Release Charts](https://github.com/pact-foundation/pact-helm-chart/workflows/Release%20Charts/badge.svg?branch=master)
 
-This repository will house the Pact Broker Helm Chart.
+This repository will house the Pact Broker Helm Chart. It is important to note that this is a community maintained Helm Chart that has been brought under the Pact Foundation GitHub for ease of reference. The current maintainers are:
+
+- [Chris Burns](https://github.com/ChrisJBurns)
+
+We are always looking for maintainers, please let us know if you'd be interested. :)
 
 ## Usage
 
@@ -27,8 +31,8 @@ helm-docs --template-files _readme_templates.gotmpl
 
 ## Contributing
 
-The source code of all [Pact Broker](https://docs.pact.io/pact_broker/overview) [Helm](https://helm.sh) charts can be found on Github: <https://github.com/ChrisJBurns/pact-helm-chart/tree/master/charts/pact-broker/>
+The source code of all [Pact Broker](https://docs.pact.io/pact_broker/overview) [Helm](https://helm.sh) charts can be found on Github: <https://github.com/pact-foundation/pact-broker-chart/tree/master/charts/pact-broker/>
 
 ## License
 
-[MIT License](https://github.com/ChrisJBurns/pact-helm-chart/blob/master/LICENSE).
+[MIT License](https://github.com/pact-foundation/pact-broker-chart/blob/master/LICENSE).
