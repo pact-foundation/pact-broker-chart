@@ -7,7 +7,7 @@ The Pact Broker is an application for sharing for Pact contracts and verificatio
 ## TL;DR
 
 ```console
-helm repo add pact-broker https://chrisjburns.github.io/pact-broker-chart
+helm repo add pact-broker https://pact-foundation.github.io/pact-broker-chart/
 helm install pact-broker pact-broker/pact-broker
 ```
 
