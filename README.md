@@ -1,6 +1,6 @@
 # Pact Broker Helm Chart
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) ![Release Charts](https://github.com/pact-foundation/pact-helm-chart/workflows/Release%20Charts/badge.svg?branch=master)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) ![Release Charts](https://github.com/pact-foundation/pact-broker-chart/workflows/Release%20Charts/badge.svg?branch=master)
 
 This repository will house the Pact Broker Helm Chart. It is important to note that this is a community maintained Helm Chart that has been brought under the Pact Foundation GitHub for ease of reference. The current maintainers are:
 
@@ -16,7 +16,7 @@ Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 Once Helm is set up properly, add the repo as follows:
 
 ```console
-helm repo add pact-broker https://chrisjburns.github.io/pact-broker-chart
+helm repo add pact-broker https://pact-foundation.github.io/pact-broker-chart/
 helm install pact-broker pact-broker/pact-broker
 ```
 
