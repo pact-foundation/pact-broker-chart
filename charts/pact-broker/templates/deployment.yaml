@@ -146,7 +146,7 @@ spec:
             - name: PACT_BROKER_BASIC_AUTH_READ_ONLY_USERNAME
               {{- if .Values.broker.config.basicAuth.readUser.username }}
               value: {{ .Values.broker.config.basicAuth.readUser.username }}
-              {{- else }}
+              {{- else if .Values.broker.config.basicAuth.readUser.existingSecret }}
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.broker.config.basicAuth.readUser.existingSecret }}
@@ -157,7 +157,7 @@ spec:
             - name: PACT_BROKER_BASIC_AUTH_READ_ONLY_PASSWORD
               {{- if .Values.broker.config.basicAuth.readUser.password }}
               value: {{ .Values.broker.config.basicAuth.readUser.password }}
-              {{- else }}
+              {{- else if .Values.broker.config.basicAuth.readUser.existingSecret }}
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.broker.config.basicAuth.readUser.existingSecret }}
