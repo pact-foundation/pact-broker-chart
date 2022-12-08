@@ -36,7 +36,7 @@ jobs:
           fi
       
       - name: Run chart-testing (lint)
-        run: ct lint --target-branch ${{ github.event.repository.default_branch }} --validate-maintainers=false
+        run: ct lint --config ct.yaml --target-branch ${{ github.event.repository.default_branch }} --validate-maintainers=false
         if: steps.list-changed.outputs.changed == 'true'
 
       - name: Create kind cluster
@@ -44,5 +44,5 @@ jobs:
         if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install) for Pact Broker
-        run: ct install --target-branch ${{ github.event.repository.default_branch }}
+        run: ct install --config ct-install.yaml --target-branch ${{ github.event.repository.default_branch }}
         if: steps.list-changed.outputs.changed == 'true'

@@ -6,5 +6,4 @@
 
 # helm chart dependencies
 charts/*/charts/
-charts/*/Chart.lock
 **/charts/*.tgz

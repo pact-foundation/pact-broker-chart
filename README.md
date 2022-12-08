@@ -22,13 +22,6 @@ helm install pact-broker pact-broker/pact-broker
 
 You can then run `helm search repo pact-broker` to see the charts.
 
-## Helm-Docs
-We use [helm-docs](https://github.com/norwoodj/helm-docs) to automatically generate the documentation for the charts. To run the autogeneration of the Helm documentation download the [helm-docs `cli`](https://github.com/norwoodj/helm-docs) tool and then run the following command inside the `charts/pact-broker` folder.
-
-```console
-helm-docs --template-files _readme_templates.gotmpl
-```
-
 ## Contributing
 
 The source code of all [Pact Broker](https://docs.pact.io/pact_broker/overview) [Helm](https://helm.sh) charts can be found on Github: <https://github.com/pact-foundation/pact-broker-chart/tree/master/charts/pact-broker/>
