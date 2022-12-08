@@ -1,4 +1,4 @@
-# -- Pact Broker image information
+# Pact Broker image information
 image:
 
   # -- Pact Broker image registry
@@ -26,8 +26,7 @@ image:
   #
   pullSecrets: []
 
-# -- Broker configuration
-#
+# Broker configuration
 broker:
 
   # -- Additional labels that can be added to the Broker deployment
@@ -39,7 +38,7 @@ broker:
   # -- Number of Pact Broker replicas to deploy
   replicaCount: 1
 
-  # -- Container port configuration
+  # Container port configuration
   containerPorts:
 
     # -- http port
@@ -48,7 +47,7 @@ broker:
     # -- http port
     https: 8443
 
-  # -- Pact Broker pods' [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
+  # Pact Broker pods' [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
   podSecurityContext:
 
     # -- Enable Pact Broker pods' Security Context
@@ -57,7 +56,7 @@ broker:
     # -- Set Pact Broker pod's Security Context fsGroup
     fsGroup: 1001
 
-  # -- Pact Broker containers' [Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container)
+  # Pact Broker containers' [Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container)
   containerSecurityContext:
 
     # -- Enable Pact Broker containers' Security Context
@@ -69,7 +68,7 @@ broker:
     # -- Set Pact Broker container's Security Context runAsNonRoot
     runAsNonRoot: true
 
-  # -- Pact Broker Config, mostly set with the [default values](https://docs.pact.io/pact_broker/configuration/settings).
+  # Pact Broker Config, mostly set with the [default values](https://docs.pact.io/pact_broker/configuration/settings).
   config:
     # -- The application log level
     # Allowed values: debug, info, warn, error, fatal
@@ -130,7 +129,7 @@ broker:
     # The number of seconds after which to check the health of a connection from a connection pool before passing it to the application.
     databaseConnectionValidationTimeout: 3600
 
-    # -- Pact Broker Basic Authentication
+    # Pact Broker Basic Authentication
     basicAuth:
 
       # -- Set to true if you basic authentication to be enabled
@@ -148,7 +147,7 @@ broker:
       # -- Set this to true to allow status badges to be embedded in README files without requiring a hardcoded password.
       enablePublicBadgeAccess: false
 
-      # -- Pact Broker Basic Authentication Credentials For Write user
+      # Pact Broker Basic Authentication Credentials For Write user
       writeUser:
 
         # -- Usermame for write access to the Pact Broker
@@ -166,7 +165,7 @@ broker:
         # -- The key to which holds the value of the password within the existingSecret
         existingSecretPasswordKey: ""
 
-      # -- Pact Broker Basic Authentication Credentials For Read user
+      # Pact Broker Basic Authentication Credentials For Read user
       readUser:
 
         # -- Usermame for read access to the Pact Broker
@@ -253,7 +252,7 @@ broker:
     # -- A list of features to enable in the Pact Broker for beta testing before public release.
     features:
 
-    # -- Pact Broker [automatic data cleanup](https://docs.pact.io/pact_broker/docker_images/pactfoundation#automatic-data-clean-up)
+    # Pact Broker [automatic data cleanup](https://docs.pact.io/pact_broker/docker_images/pactfoundation#automatic-data-clean-up)
     databaseClean:
 
       # -- Set to true to enable the automatic data clean up.
@@ -283,20 +282,20 @@ broker:
   # -- Pact Broker [Node Selector](https://kubernetes.io/docs/user-guide/node-selection/)
   nodeSelector: {}
 
-  # -- Pact Broker [resource requests and limits](https://kubernetes.io/docs/user-guide/compute-resources/)
+  # Pact Broker [resource requests and limits](https://kubernetes.io/docs/user-guide/compute-resources/)
   resources:
 
-    # -- The resources limits for the Pact Broker containers
+    # The resources limits for the Pact Broker containers
     limits:
       memory: 1024Mi
       cpu: 2500m
 
-    # -- The requested resources for the Pact Broker containers
+    # The requested resources for the Pact Broker containers
     requests:
       memory: 512Mi
       cpu: 100m
 
-  # -- Pact Broker [Liveness Probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)
+  # Pact Broker [Liveness Probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)
   livenessProbe:
 
     # -- Enable livenessProbe on Pact Broker containers
@@ -317,7 +316,7 @@ broker:
     # -- Success threshold for livenessProbe
     successThreshold: 1
 
-  # -- Pact Broker [Readiness Probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)
+  # Pact Broker [Readiness Probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes)
   readinessProbe:
 
     # -- Enable readinessProbe on Pact Broker containers
@@ -338,14 +337,14 @@ broker:
     # -- Success threshold for readinessProbe
     successThreshold: 1
 
-# -- Service configuration
+#  Service configuration
 service:
 
   # -- Kubernetes service type
   #
   type: "ClusterIP"
 
-  # -- Service port configuration
+  # Service port configuration
   ports:
 
     # -- Pact service HTTP port
@@ -354,7 +353,7 @@ service:
     # -- Pact service HTTPS port
     https: 443
 
-  # -- Service [NodePort configuration](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport)
+  # Service [NodePort configuration](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport)
   nodePorts:
 
     # -- http nodePort
@@ -369,13 +368,37 @@ service:
   # -- Pact Broker Service [loadBalancerIP](https://kubernetes.io/docs/user-guide/services/#type-loadbalancer)
   loadBalancerIP: ""
 
-# -- PostgreSQL [chart configuration](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml)
+# Ingress parameters
+ingress:
+  # -- ingress.enabled Enable the creation of the ingress resource
+  enabled: true
+
+  # -- ingress.className Name of the IngressClass cluster resource which defines which controller will implement the resource (e.g nginx)
+  className: ""
+
+  # -- ingress.annotations Additional annotations for the Ingress resource
+  annotations: {}
+
+  # -- host Hostname to be used to expose the route to access the Pact Broker
+  host: ""
+
+  # Ingress TLS parameters
+  tls:
+
+    # -- ingress.tls.enabled Enable TLS configuration for the host defined at `ingress.host` parameter
+    enabled: false
+
+    # -- ingress.tls.secretName The name to which the TLS Secret will be called
+    secretName: ""
+
+
+# PostgreSQL [chart configuration](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml)
 postgresql:
 
   # -- Switch to enable or disable the PostgreSQL helm chart
   enabled: true
 
-  # -- The authentication details of the Postgres database
+  # The authentication details of the Postgres database
   auth:
 
     # -- Name for a custom user to create
@@ -390,7 +413,7 @@ postgresql:
     # -- Name of existing secret to use for PostgreSQL credentials
     existingSecret: ""
 
-    # -- The secret keys Postgres will look for to retrieve the relevant password
+    # The secret keys Postgres will look for to retrieve the relevant password
     secretKeys:
 
       # -- The key in which Postgres well look for, for the admin password, in the existing Secret
@@ -405,13 +428,13 @@ postgresql:
   # -- PostgreSQL architecture (`standalone` or `replication`)
   architecture: standalone
 
-# -- External database configuration
+# External database configuration
 externalDatabase:
 
   # -- Switch to enable or disable the externalDatabase connection
   enabled: false
 
-  # --
+  # External Database Configuration
   config:
 
     # -- Database host
@@ -427,7 +450,7 @@ externalDatabase:
     # -- External database name
     databaseName: ""
 
-    # -- External database auth details that the Pact Broker will use to connect
+    # External database auth details that the Pact Broker will use to connect
     auth:
 
       # -- Non-root username for the Pact Broker
@@ -442,7 +465,7 @@ externalDatabase:
       # -- The key to which the password will be stored under within existing secret.
       existingSecretPasswordKey: "user-password"
 
-# -- Service Account Configuration
+# Service Account Configuration
 serviceAccount:
 
   # -- Enable the creation of a ServiceAccount for Pact Broker pods

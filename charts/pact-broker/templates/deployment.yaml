@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }} 
   labels:
     app.kubernetes.io/name: {{ include "chart.name" . }}
     helm.sh/chart: {{ .Chart.Name }}
