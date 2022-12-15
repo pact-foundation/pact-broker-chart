@@ -2,14 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }} 
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     app.kubernetes.io/name: {{ include "chart.name" . }}
     helm.sh/chart: {{ .Chart.Name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.broker.replicaCount }}
-  selector: 
+  selector:
     matchLabels:
       app.kubernetes.io/instance: {{ .Release.Name }}
       app.kubernetes.io/name: {{ include "chart.name" . }}
@@ -85,7 +85,7 @@ spec:
               value: {{ include "broker.databasePort" . }}
             - name: PACT_BROKER_DATABASE_NAME
               value: {{ include "broker.databaseName" . }}
-            - name: PACT_BROKER_DATABASE_USERNAME     
+            - name: PACT_BROKER_DATABASE_USERNAME
               value: {{ include "broker.databaseUser" . }}
             - name: PACT_BROKER_DATABASE_PASSWORD
               valueFrom:
@@ -223,6 +223,8 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.broker.resources | nindent 12 }}
+          volumeMounts:
+          {{- toYaml .Values.broker.volumeMounts | nindent 12 }}
           {{- if .Values.nodeSelector }}
           nodeSelector:
           {{ toYaml .Values.nodeSelector | indent 8 }}
@@ -247,3 +249,5 @@ spec:
               path: /diagnostic/status/heartbeat
               port: http
           {{- end }}
+      volumes:
+      {{- toYaml .Values.broker.volumes | nindent 8 }}

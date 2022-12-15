@@ -43,12 +43,12 @@ helm install pact-broker pact-broker/pact-broker
 | broker.config.basicAuth.readUser.existingSecretPasswordKey | The key to which holds the value of the password within the existingSecret | string | `""` |
 | broker.config.basicAuth.readUser.existingSecretUsernameKey | The key to which holds the value of the username within the existingSecret | string | `""` |
 | broker.config.basicAuth.readUser.password | Password for read access to the Pact Broker | string | `""` |
-| broker.config.basicAuth.readUser.username | Usermame for read access to the Pact Broker | string | `""` |
+| broker.config.basicAuth.readUser.username | Username for read access to the Pact Broker | string | `""` |
 | broker.config.basicAuth.writeUser.existingSecret | Name of an existing Kubernetes secret containing credentials to access the Pact Broker | string | `""` |
 | broker.config.basicAuth.writeUser.existingSecretPasswordKey | The key to which holds the value of the password within the existingSecret | string | `""` |
 | broker.config.basicAuth.writeUser.existingSecretUsernameKey | The key to which holds the value of the username within the existingSecret | string | `""` |
 | broker.config.basicAuth.writeUser.password | Password for write access to the Pact Broker | string | `""` |
-| broker.config.basicAuth.writeUser.username | Usermame for write access to the Pact Broker | string | `""` |
+| broker.config.basicAuth.writeUser.username | Username for write access to the Pact Broker | string | `""` |
 | broker.config.checkForPotentialDuplicatePacticipantNames | When a pact is published, the consumer, provider and consumer version resources are automatically created. To prevent a pacticipant (consumer or provider) being created multiple times with slightly different name variants (eg. FooBar/foo-bar/foo bar/Foo Bar Service), a check is performed to determine if a new pacticipant name is likely to be a duplicate of any existing applications. If it is deemed similar enough to an existing name, a 409 will be returned. | bool | `true` |
 | broker.config.createDeployedVersionsForTags | When true and a tag is created, if there is an environment with the name of the newly created tag, a deployed version is also created for the pacticipant version. | bool | `true` |
 | broker.config.databaseClean.cronSchedule | Set to a cron schedule that will run when your Broker is under the least operational load. | string | `"15 2 * * *"` |
@@ -111,6 +111,8 @@ helm install pact-broker pact-broker/pact-broker
 | broker.resources.requests.cpu |  | string | `"100m"` |
 | broker.resources.requests.memory |  | string | `"512Mi"` |
 | broker.tolerations | Pact Broker [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) | list | `[]` |
+| broker.volumes | [Kubernetes Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) | list | `[]` |
+| broker.volumeMounts | [Kubernetes Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) | list | `[]` |
 | externalDatabase.config | External Database Configuration | object | `{"adapter":"","auth":{"existingSecret":"","existingSecretPasswordKey":"user-password","password":"","username":""},"databaseName":"","host":"","port":""}` |
 | externalDatabase.config.adapter | Database engine to use. Only allowed values are `postgres` or `sqlite`. More info [here](https://docs.pact.io/pact_broker/docker_images/pactfoundation#getting-started) | string | `""` |
 | externalDatabase.config.auth.existingSecret | Name of an existing Kubernetes secret containing the database credentials | string | `""` |
