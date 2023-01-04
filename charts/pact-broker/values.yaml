@@ -339,9 +339,9 @@ broker:
 
   # Volumes to mount
   volumes: []
-    # - hostPath:
-    #     path: <HOST_PATH>
-    #   name: <VOLUME_NAME>
+    # - name: cache-volume
+    #   emptyDir:
+    #    sizeLimit: 500Mi
 
   # Volume mounts
   volumeMounts: []
