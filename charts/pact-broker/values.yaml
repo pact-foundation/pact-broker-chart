@@ -8,7 +8,7 @@ image:
   repository: pactfoundation/pact-broker
 
   # -- Pact Broker image tag (immutable tags are recommended)
-  tag: 2.100.0.1
+  tag: 2.105.0.1
 
   # -- Specify a imagePullPolicy
   # Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -150,7 +150,7 @@ broker:
       # Pact Broker Basic Authentication Credentials For Write user
       writeUser:
 
-        # -- Usermame for write access to the Pact Broker
+        # -- Username for write access to the Pact Broker
         username: ""
 
         # -- Password for write access to the Pact Broker
@@ -168,7 +168,7 @@ broker:
       # Pact Broker Basic Authentication Credentials For Read user
       readUser:
 
-        # -- Usermame for read access to the Pact Broker
+        # -- Username for read access to the Pact Broker
         username: ""
 
         # -- Password for read access to the Pact Broker
@@ -337,6 +337,18 @@ broker:
     # -- Success threshold for readinessProbe
     successThreshold: 1
 
+  # Volumes to mount
+  volumes: []
+    # - name: cache-volume
+    #   emptyDir:
+    #    sizeLimit: 500Mi
+
+  # Volume mounts
+  volumeMounts: []
+    # - mountPath: <CONTAINER_PATH>
+    #   name: <VOLUME_NAME>
+    #   readOnly: true
+
 #  Service configuration
 service:
 
@@ -390,7 +402,6 @@ ingress:
 
     # -- ingress.tls.secretName The name to which the TLS Secret will be called
     secretName: ""
-
 
 # PostgreSQL [chart configuration](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml)
 postgresql:
