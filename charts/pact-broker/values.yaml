@@ -494,3 +494,6 @@ serviceAccount:
 
   # -- Auto-mount the service account token in the pod
   automountServiceAccountToken: true
+
+  # -- (string) Name of image pull secrets that should be attached to the service account
+  imagePullSecrets: 
