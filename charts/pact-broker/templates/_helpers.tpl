@@ -44,6 +44,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "broker.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "broker.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "broker-sa" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
 Return the Database hostname
 */}}
 {{- define "broker.databaseHost" -}}
