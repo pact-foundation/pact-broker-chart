@@ -32,4 +32,4 @@ jobs:
         with:
           config: cr.yaml
         env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_TOKEN: "${{ secrets.TOKEN }}"
