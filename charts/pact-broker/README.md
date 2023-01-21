@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.100.0.1](https://img.shields.io/badge/AppVersion-2.100.0.1-informational?style=flat-square)
+![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -105,15 +105,15 @@ helm install pact-broker pact-broker/pact-broker
 | broker.readinessProbe.periodSeconds | Period seconds for readinessProbe | int | `10` |
 | broker.readinessProbe.successThreshold | Success threshold for readinessProbe | int | `1` |
 | broker.readinessProbe.timeoutSeconds | Timeout seconds for readinessProbe | int | `1` |
-| broker.replicaCount | Number of Pact Broker replicas to deploy | int | `1` |
+| broker.replicaCount | Number of Pact Broker replicas to deploy | int | `nil` |
 | broker.resources.limits.cpu |  | string | `"2500m"` |
 | broker.resources.limits.memory |  | string | `"1024Mi"` |
 | broker.resources.requests.cpu |  | string | `"100m"` |
 | broker.resources.requests.memory |  | string | `"512Mi"` |
+| broker.revisionHistoryLimit | Number of Deployment Revisions to set | int | `10` |
 | broker.tolerations | Pact Broker [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) | list | `[]` |
-| broker.volumes | [Kubernetes Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) | list | `[]` |
-| broker.volumeMounts | [Kubernetes Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) | list | `[]` |
-| externalDatabase.config | External Database Configuration | object | `{"adapter":"","auth":{"existingSecret":"","existingSecretPasswordKey":"user-password","password":"","username":""},"databaseName":"","host":"","port":""}` |
+| broker.volumeMounts |  | list | `[]` |
+| broker.volumes |  | list | `[]` |
 | externalDatabase.config.adapter | Database engine to use. Only allowed values are `postgres` or `sqlite`. More info [here](https://docs.pact.io/pact_broker/docker_images/pactfoundation#getting-started) | string | `""` |
 | externalDatabase.config.auth.existingSecret | Name of an existing Kubernetes secret containing the database credentials | string | `""` |
 | externalDatabase.config.auth.existingSecretPasswordKey | The key to which the password will be stored under within existing secret. | string | `"user-password"` |
@@ -127,7 +127,7 @@ helm install pact-broker pact-broker/pact-broker
 | image.pullSecrets | Array of imagePullSecrets to allow pulling the Pact Broker image from private registries. PS: Secret's must exist in the namespace to which you deploy the Pact Broker. more info [here](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)  Example:   pullSecrets:    - mySecretName  | list | `[]` |
 | image.registry | Pact Broker image registry | string | `"docker.io"` |
 | image.repository | Pact Broker image repository | string | `"pactfoundation/pact-broker"` |
-| image.tag | Pact Broker image tag (immutable tags are recommended) | string | `"2.100.0.1"` |
+| image.tag | Pact Broker image tag (immutable tags are recommended) | string | `"2.105.0.1"` |
 | ingress.annotations | ingress.annotations Additional annotations for the Ingress resource | object | `{}` |
 | ingress.className | ingress.className Name of the IngressClass cluster resource which defines which controller will implement the resource (e.g nginx) | string | `""` |
 | ingress.enabled | ingress.enabled Enable the creation of the ingress resource | bool | `true` |

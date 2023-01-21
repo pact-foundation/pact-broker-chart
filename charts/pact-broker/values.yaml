@@ -489,7 +489,6 @@ serviceAccount:
   # If not set and `serviceAccount.create` is true, a name is generated
   name: broker-sa
 
-  customSA
 
   # -- Additional custom labels to the service ServiceAccount.
   labels: {}
