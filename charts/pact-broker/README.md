@@ -105,7 +105,7 @@ helm install pact-broker pact-broker/pact-broker
 | broker.readinessProbe.periodSeconds | Period seconds for readinessProbe | int | `10` |
 | broker.readinessProbe.successThreshold | Success threshold for readinessProbe | int | `1` |
 | broker.readinessProbe.timeoutSeconds | Timeout seconds for readinessProbe | int | `1` |
-| broker.replicaCount | Number of Pact Broker replicas to deploy | int | `nil` |
+| broker.replicaCount | Number of Pact Broker replicas to deploy | int | `1` |
 | broker.resources.limits.cpu |  | string | `"2500m"` |
 | broker.resources.limits.memory |  | string | `"1024Mi"` |
 | broker.resources.requests.cpu |  | string | `"100m"` |

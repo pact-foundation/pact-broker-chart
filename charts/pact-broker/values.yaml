@@ -36,7 +36,7 @@ broker:
   annotations: {}
 
   # -- (int) Number of Pact Broker replicas to deploy
-  replicaCount:
+  replicaCount: 1
 
   # -- Number of Deployment Revisions to set
   revisionHistoryLimit: 10
