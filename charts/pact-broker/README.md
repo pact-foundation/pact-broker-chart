@@ -66,7 +66,7 @@ helm install pact-broker pact-broker/pact-broker
 | broker.config.disable_ssl | If set to true, SSL verification will be disabled for the HTTP requests made by the webhooks | bool | `false` |
 | broker.config.enableDiagnosticEndpoints | Whether or not to enable the diagnostic endpoints at /diagnostic/status/heartbeat and "diagnostic/status/dependencies | bool | `true` |
 | broker.config.features | A list of features to enable in the Pact Broker for beta testing before public release. | string | `nil` |
-| broker.config.hidePactflowMessages | Set to true to hide the messages in the logs about Pactflow | bool | `true` |
+| broker.config.hidePactflowMessages | Set to true to hide the messages in the logs about PactFlow | bool | `true` |
 | broker.config.httpDebugLoggingEnabled | Enable this setting to print the entire request and response to the logs at debug level. Do not leave this on permanently, as it will have performance and security issues. Ensure the application log_level is set to debug when this setting is enabled. | bool | `false` |
 | broker.config.logFormat | The application log format. Can be any value supported by Semantic Logger. Allowed values: default, json, color | string | `"default"` |
 | broker.config.logLevel | The application log level Allowed values: debug, info, warn, error, fatal | string | `"info"` |

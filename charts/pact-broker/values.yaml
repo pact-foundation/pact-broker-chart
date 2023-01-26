@@ -86,7 +86,7 @@ broker:
     # Ensure the application log_level is set to debug when this setting is enabled.
     httpDebugLoggingEnabled: false
 
-    # -- Set to true to hide the messages in the logs about Pactflow
+    # -- Set to true to hide the messages in the logs about PactFlow
     hidePactflowMessages: true
 
     # -- The Postgresql ssl mode.
