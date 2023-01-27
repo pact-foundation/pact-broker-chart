@@ -40,11 +40,7 @@ Charts are also available in OCI format. The list of available charts can be fou
 Install one of the available charts:
 
 ```shell
-<<<<<<< HEAD
 helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/pact-broker --version=<version>
-=======
-helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/charts/pact-broker --version=<version>
->>>>>>> master
 ```
 
 ## Source Code
