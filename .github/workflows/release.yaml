@@ -4,14 +4,19 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "charts/**"
 
-permissions:
-  contents: write
-  packages: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
