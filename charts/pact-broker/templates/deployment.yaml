@@ -28,7 +28,7 @@ spec:
         {{- end }}
       {{- end }}
     spec:
-      serviceAccountName: {{ .broker.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
