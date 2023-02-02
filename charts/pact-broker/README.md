@@ -7,8 +7,40 @@ The Pact Broker is an application for sharing for Pact contracts and verificatio
 ## TL;DR
 
 ```console
+helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add pact-broker https://pact-foundation.github.io/pact-broker-chart/
+
 helm install pact-broker pact-broker/pact-broker
+```
+
+## Usage
+
+The Pact Broker Chart is available in the following formats:
+- [Chart Repository](https://helm.sh/docs/topics/chart_repository/)
+- [OCI Artifacts](https://helm.sh/docs/topics/registries/)
+
+### Installing from Chart Repository
+
+The following command can be used to add the chart repository:
+
+```console
+helm repo add pact-broker https://pact-foundation.github.io/pact-broker-chart/
+```
+
+Once the chart has been added, install one of the available charts:
+
+```console
+helm install pact-broker pact-broker/pact-broker
+```
+
+### Installing from an OCI Registry
+
+Charts are also available in OCI format. The list of available charts can be found [here](https://github.com/pact-foundation/pact-broker-chart/).
+
+Install one of the available charts:
+
+```shell
+helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/pact-broker --version=<version>
 ```
 
 ## Source Code
@@ -110,6 +142,7 @@ helm install pact-broker pact-broker/pact-broker
 | broker.resources.limits.memory |  | string | `"1024Mi"` |
 | broker.resources.requests.cpu |  | string | `"100m"` |
 | broker.resources.requests.memory |  | string | `"512Mi"` |
+| broker.revisionHistoryLimit | Number of Deployment Revisions to set | int | `10` |
 | broker.tolerations | Pact Broker [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) | list | `[]` |
 | broker.volumeMounts |  | list | `[]` |
 | broker.volumes |  | list | `[]` |

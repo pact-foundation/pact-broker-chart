@@ -9,6 +9,9 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.broker.replicaCount }}
+  {{- if .Values.broker.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.broker.revisionHistoryLimit}}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/instance: {{ .Release.Name }}
