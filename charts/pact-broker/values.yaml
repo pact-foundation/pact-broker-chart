@@ -500,4 +500,4 @@ serviceAccount:
   automountServiceAccountToken: true
 
   # -- Name of image pull secrets that should be attached to the service account
-  imagePullSecrets: 
+  imagePullSecrets:
