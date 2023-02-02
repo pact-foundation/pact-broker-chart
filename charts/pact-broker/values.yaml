@@ -35,8 +35,11 @@ broker:
   # -- Additional annotations that can be added to the Broker deployment
   annotations: {}
 
-  # -- Number of Pact Broker replicas to deploy
+  # -- (int) Number of Pact Broker replicas to deploy
   replicaCount: 1
+
+  # -- Number of Deployment Revisions to set
+  revisionHistoryLimit: 10
 
   # Container port configuration
   containerPorts:
@@ -485,6 +488,7 @@ serviceAccount:
   # -- Name of the created ServiceAccount
   # If not set and `serviceAccount.create` is true, a name is generated
   name: broker-sa
+
 
   # -- Additional custom labels to the service ServiceAccount.
   labels: {}
