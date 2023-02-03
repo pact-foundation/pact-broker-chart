@@ -1,14 +1,46 @@
 # pact-broker
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
+![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
 ## TL;DR
 
 ```console
+helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add pact-broker https://pact-foundation.github.io/pact-broker-chart/
+
 helm install pact-broker pact-broker/pact-broker
+```
+
+## Usage
+
+The Pact Broker Chart is available in the following formats:
+- [Chart Repository](https://helm.sh/docs/topics/chart_repository/)
+- [OCI Artifacts](https://helm.sh/docs/topics/registries/)
+
+### Installing from Chart Repository
+
+The following command can be used to add the chart repository:
+
+```console
+helm repo add pact-broker https://pact-foundation.github.io/pact-broker-chart/
+```
+
+Once the chart has been added, install one of the available charts:
+
+```console
+helm install pact-broker pact-broker/pact-broker
+```
+
+### Installing from an OCI Registry
+
+Charts are also available in OCI format. The list of available charts can be found [here](https://github.com/pact-foundation/pact-broker-chart/).
+
+Install one of the available charts:
+
+```shell
+helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/pact-broker --version=<version>
 ```
 
 ## Source Code
