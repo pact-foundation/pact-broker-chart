@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -185,6 +185,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | serviceAccount.annotations | Additional custom annotations for the ServiceAccount. | object | `{}` |
 | serviceAccount.automountServiceAccountToken | Auto-mount the service account token in the pod | bool | `true` |
 | serviceAccount.create | Enable the creation of a ServiceAccount for Pact Broker pods | bool | `true` |
+| serviceAccount.imagePullSecrets | Name of image pull secrets that should be attached to the service account | list | `[]` |
 | serviceAccount.labels | Additional custom labels to the service ServiceAccount. | object | `{}` |
 | serviceAccount.name | Name of the created ServiceAccount If not set and `serviceAccount.create` is true, a name is generated | string | `"broker-sa"` |
 
