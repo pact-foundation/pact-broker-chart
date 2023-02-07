@@ -118,3 +118,15 @@ Return the databaseSecret key to retrieve credentials for database
     {{- end -}}
 {{- end -}}
 {{- end -}}
+
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "broker.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}

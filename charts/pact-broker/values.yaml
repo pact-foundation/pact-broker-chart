@@ -485,9 +485,12 @@ serviceAccount:
   # -- Enable the creation of a ServiceAccount for Pact Broker pods
   create: true
 
-  # -- Name of the created ServiceAccount
-  # If not set and `serviceAccount.create` is true, a name is generated
-  name: broker-sa
+  # -- Name of the ServiceAccount
+  # If `serviceAccount.create` is `true` and `serviceAccount.name` is not set, a name is generated based on the release name.
+  # If `serviceAccount.create` is `true` and `serviceAccount.name` is set, a service account is created and named after value set in `serviceAccount.name`
+  # If `serviceAccount.create` is `false` and `serviceAccount.name` is not set, the `default` service account is used for the Deployment.
+  # If `serviceAccount.create` is `false` and `serviceAccount.name` is set, the service account specified at `serviceAccount.name` is used for the Deployment.
+  name: ""
 
 
   # -- Additional custom labels to the service ServiceAccount.
