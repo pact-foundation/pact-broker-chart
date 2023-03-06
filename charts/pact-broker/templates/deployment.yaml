@@ -260,7 +260,7 @@ spec:
       {{- end }}
       {{- if .Values.affinity }}
       affinity:
-      {{- toYaml .Values.affinity | nindent 8 }}
+      {{- toYaml .Values.broker.affinity | nindent 8 }}
       {{- end }}
       volumes:
       {{- toYaml .Values.broker.volumes | nindent 8 }}
