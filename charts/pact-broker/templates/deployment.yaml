@@ -258,7 +258,7 @@ spec:
       tolerations:
       {{- toYaml .Values.broker.tolerations | nindent 8 }}
       {{- end }}
-      {{- if .Values.affinity }}
+      {{- if .Values.broker.affinity }}
       affinity:
       {{- toYaml .Values.broker.affinity | nindent 8 }}
       {{- end }}
