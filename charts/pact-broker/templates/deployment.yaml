@@ -254,7 +254,7 @@ spec:
       nodeSelector:
       {{- toYaml .Values.broker.nodeSelector | nindent 8 }}
       {{- end }}
-      {{- if .Values.tolerations }}
+      {{- if .Values.broker.tolerations }}
       tolerations:
       {{- toYaml .Values.broker.tolerations | nindent 8 }}
       {{- end }}
