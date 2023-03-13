@@ -150,7 +150,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | externalDatabase.config.adapter | Database engine to use. Only allowed values are `postgres` or `sqlite`. More info [here](https://docs.pact.io/pact_broker/docker_images/pactfoundation#getting-started) | string | `""` |
 | externalDatabase.config.auth.existingSecret | Name of an existing Kubernetes secret containing the database credentials | string | `""` |
 | externalDatabase.config.auth.existingSecretPasswordKey | The key to which the password will be stored under within existing secret. | string | `"user-password"` |
-| externalDatabase.config.auth.password | Password for the non-root username for the Pact Broker | string | `""` |
+| externalDatabase.config.auth.password | Password for the non-root username for the Pact Broker | string | `nil` |
 | externalDatabase.config.auth.username | Non-root username for the Pact Broker | string | `""` |
 | externalDatabase.config.databaseName | External database name | string | `""` |
 | externalDatabase.config.host | Database host | string | `""` |

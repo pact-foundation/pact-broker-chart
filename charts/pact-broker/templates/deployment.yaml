@@ -93,10 +93,14 @@ spec:
             - name: PACT_BROKER_DATABASE_USERNAME
               value: {{ include "broker.databaseUser" . }}
             - name: PACT_BROKER_DATABASE_PASSWORD
+              {{- if (include "broker.databasePassword" .) }}
+              value: {{ include "broker.databasePassword" . }}
+              {{- else }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "broker.databaseSecretName" . }}
                   key: {{ include "broker.databaseSecretKey" . }}
+              {{- end }}
             - name: PACT_BROKER_DATABASE_SSLMODE
               value: {{ .Values.broker.config.databaseSslmode | quote }}
             - name: PACT_BROKER_SQL_LOG_LEVEL

@@ -481,7 +481,7 @@ externalDatabase:
       username: ""
 
       # -- Password for the non-root username for the Pact Broker
-      password: ""
+      password: null
 
       # -- Name of an existing Kubernetes secret containing the database credentials
       existingSecret: ""

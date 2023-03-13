@@ -82,6 +82,12 @@ Return the Database username
 {{- ternary .Values.postgresql.auth.username .Values.externalDatabase.config.auth.username .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
+{{/*
+Return the Database password
+*/}}
+{{- define "broker.databasePassword" -}}
+{{- ternary .Values.postgresql.auth.password .Values.externalDatabase.config.auth.password .Values.postgresql.enabled | quote -}}
+{{- end -}}
 
 {{/*
 Return the Database Secret Name
