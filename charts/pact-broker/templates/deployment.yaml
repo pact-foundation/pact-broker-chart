@@ -103,6 +103,11 @@ spec:
               value: {{ .Values.postgresql.auth.password | quote }}
                 {{- else if and .Values.externalDatabase.enabled .Values.externalDatabase.config.auth.password }}
               value: {{ .Values.externalDatabase.config.auth.password | quote }}
+                {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "broker.databaseSecretName" . }}
+                  key: {{ include "broker.databaseSecretKey" . }}
                 {{- end }}
               {{- end }}
             - name: PACT_BROKER_DATABASE_SSLMODE
