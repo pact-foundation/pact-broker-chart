@@ -248,6 +248,9 @@ spec:
               path: /diagnostic/status/heartbeat
               port: http
           {{- end }}
+      {{- with .Values.broker.extraContainers }}
+        {{- tpl (toYaml .) $ | nindent 8 }}
+      {{- end }}
       {{- if .Values.broker.nodeSelector }}
       nodeSelector:
       {{- toYaml .Values.broker.nodeSelector | nindent 8 }}
