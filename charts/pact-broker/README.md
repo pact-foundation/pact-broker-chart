@@ -146,6 +146,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.tolerations | Pact Broker [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) | list | `[]` |
 | broker.volumeMounts |  | list | `[]` |
 | broker.volumes |  | list | `[]` |
+| broker.extraContainers | Additional containers to add to the Pact Broker pods | list | `[]` |
 | externalDatabase.config.adapter | Database engine to use. Only allowed values are `postgres` or `sqlite`. More info [here](https://docs.pact.io/pact_broker/docker_images/pactfoundation#getting-started) | string | `""` |
 | externalDatabase.config.auth.existingSecret | Name of an existing Kubernetes secret containing the database credentials | string | `""` |
 | externalDatabase.config.auth.existingSecretPasswordKey | The key to which the password will be stored under within existing secret. | string | `"user-password"` |
