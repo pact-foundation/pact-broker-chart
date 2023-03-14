@@ -352,6 +352,16 @@ broker:
     #   name: <VOLUME_NAME>
     #   readOnly: true
 
+  # -- Additional containers to add to the Pact Broker pods
+  extraContainers: []
+  # extraContainers:
+  #   - name: cloudsql-proxy
+  #     image: gcr.io/cloudsql-docker/gce-proxy:1.22.0
+  #     command:
+  #       - /cloud_sql_proxy
+  #       - '-instances=my-project:my-zone:my-db-name=tcp:5432'
+  #       - '-enable_iam_login'
+
 #  Service configuration
 service:
 
