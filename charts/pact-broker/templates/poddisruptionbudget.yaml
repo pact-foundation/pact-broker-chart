@@ -1,0 +1,23 @@
+{{- if gt (int .Values.broker.replicaCount) 1 }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    name: {{ include "chart.fullname" . }}
+    app.kubernetes.io/name: {{ include "chart.name" . }}
+    helm.sh/chart: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "chart.name" . }}
+  {{- with .Values.broker.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ . }}
+  {{- end }}
+  {{- with .Values.broker.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ . }}
+  {{- end }}
+{{- end }}

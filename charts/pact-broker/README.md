@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
+![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -121,6 +121,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.containerSecurityContext.enabled | Enable Pact Broker containers' Security Context | bool | `true` |
 | broker.containerSecurityContext.runAsNonRoot | Set Pact Broker container's Security Context runAsNonRoot | bool | `true` |
 | broker.containerSecurityContext.runAsUser | Set Pact Broker container's Security Context runAsUser | int | `1001` |
+| broker.extraContainers | Additional containers to add to the Pact Broker pods | list | `[]` |
 | broker.labels | Additional labels that can be added to the Broker deployment | object | `{}` |
 | broker.livenessProbe.enabled | Enable livenessProbe on Pact Broker containers | bool | `true` |
 | broker.livenessProbe.failureThreshold | Failure threshold for livenessProbe | int | `3` |
@@ -129,6 +130,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.livenessProbe.successThreshold | Success threshold for livenessProbe | int | `1` |
 | broker.livenessProbe.timeoutSeconds | Timeout seconds for livenessProbe | int | `5` |
 | broker.nodeSelector | Pact Broker [Node Selector](https://kubernetes.io/docs/user-guide/node-selection/) | object | `{}` |
+| broker.podDisruptionBudget.maxUnavailable | Max Unavailable Pods (alternatively one can define `minAvailable`) | int | `1` |
 | broker.podSecurityContext.enabled | Enable Pact Broker pods' Security Context | bool | `true` |
 | broker.podSecurityContext.fsGroup | Set Pact Broker pod's Security Context fsGroup | int | `1001` |
 | broker.readinessProbe.enabled | Enable readinessProbe on Pact Broker containers | bool | `true` |
@@ -144,9 +146,8 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.resources.requests.memory |  | string | `"512Mi"` |
 | broker.revisionHistoryLimit | Number of Deployment Revisions to set | int | `10` |
 | broker.tolerations | Pact Broker [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) | list | `[]` |
-| broker.volumeMounts |  | list | `[]` |
-| broker.volumes |  | list | `[]` |
-| broker.extraContainers | Additional containers to add to the Pact Broker pods | list | `[]` |
+| broker.volumeMounts | Volume mounts | list | `[]` |
+| broker.volumes | Volumes to mount | list | `[]` |
 | externalDatabase.config.adapter | Database engine to use. Only allowed values are `postgres` or `sqlite`. More info [here](https://docs.pact.io/pact_broker/docker_images/pactfoundation#getting-started) | string | `""` |
 | externalDatabase.config.auth.existingSecret | Name of an existing Kubernetes secret containing the database credentials | string | `""` |
 | externalDatabase.config.auth.existingSecretPasswordKey | The key to which the password will be stored under within existing secret. | string | `"user-password"` |
