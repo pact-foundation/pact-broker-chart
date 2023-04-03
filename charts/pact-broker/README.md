@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
+![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -86,8 +86,9 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.config.databaseClean.cronSchedule | Set to a cron schedule that will run when your Broker is under the least operational load. | string | `"15 2 * * *"` |
 | broker.config.databaseClean.deletionLimit | The maximum number of records to delete at a time for each of the removable data categories. | int | `500` |
 | broker.config.databaseClean.dryRun | Defaults to false. Set to true to see the output of what would have been deleted if the task had run. | bool | `false` |
-| broker.config.databaseClean.enabled | Set to true to enable the automatic data clean up. | bool | `false` |
-| broker.config.databaseClean.keepVersionSelectors | A JSON string containing a list of the "keep" selectors. | string | `"[{ \"max_age\": 180 }]"` |
+| broker.config.databaseClean.enabled | Set to true to enable the automatic data cleanup. | bool | `false` |
+| broker.config.databaseClean.keepVersionSelectors | A JSON string containing a list of the "keep" selectors. | string | `"[{\"latest\": true}, { \"max_age\": 180 }]"` |
+| broker.config.databaseClean.mode | Set the mode of the cleanup task. Can either be `embedded` or `external`. Setting the mode to `external` will create a Kubernetes `CronJob` to handle the cleanup; thus implementing https://docs.pact.io/pact_broker/docker_images/pactfoundation#running-the-clean-task-from-an-external-source | string | `"embedded"` |
 | broker.config.databaseClean.overwrittenDataMaxAge | The maximum number of days to keep "overwritten" data. | int | `90` |
 | broker.config.databaseConnectMaxRetries | Setting the max retries to a non-zero number will allow it to retry the connection the configured number of times, waiting 3 seconds between attempts. | int | `0` |
 | broker.config.databaseConnectionValidationTimeout |  | int | `3600` |
@@ -225,3 +226,10 @@ Configure the Pact Broker by using the username credential that you configure vi
 
 #### Specify Credentials via Secret
 Configure the Pact Broker to use an existing Secret to retrieve the user password as a means to connect to the database. Ensure that the Kubernetes Secret has the password in the `user-password` field and ensure that you have set `externalDatabase.config.auth.existingSecret` value to the name of the secret. To configure the username, you can use the `username` value.
+
+### Database Clean Task
+Pact Broker [automatic data cleanup](https://docs.pact.io/pact_broker/docker_images/pactfoundation#automatic-data-clean-up) can be enabled by setting the property `broker.config.databaseClean.enabled` to `true`.
+
+By default and for simple installations, one could rely on the built-in integrated mode of the cleanup (the property `broker.config.databaseClean.mode` having the value `embedded`).
+
+For a more advanced setup e.g. in highly available installations with more than one replica, one should rely on the [external source pattern](https://docs.pact.io/pact_broker/docker_images/pactfoundation#running-the-clean-task-from-an-external-source) of running the clean task. That can be achieved by setting the property `broker.config.databaseClean.mode` to external, which would result in having a `CronJob` performing the cleanup task instead of the main application Pods.
