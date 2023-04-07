@@ -258,8 +258,11 @@ broker:
     # Pact Broker [automatic data cleanup](https://docs.pact.io/pact_broker/docker_images/pactfoundation#automatic-data-clean-up)
     databaseClean:
 
-      # -- Set to true to enable the automatic data clean up.
+      # -- Set to true to enable the automatic data cleanup.
       enabled: false
+
+      # -- Set the mode of the cleanup task. Can either be `embedded` or `external`. Setting the mode to `external` will create a Kubernetes `CronJob` to handle the cleanup; thus implementing https://docs.pact.io/pact_broker/docker_images/pactfoundation#running-the-clean-task-from-an-external-source
+      mode: embedded
 
       # -- Set to a cron schedule that will run when your Broker is under the least operational load.
       cronSchedule: 15 2 * * *
@@ -271,7 +274,7 @@ broker:
       overwrittenDataMaxAge: 90
 
       # -- A JSON string containing a list of the "keep" selectors.
-      keepVersionSelectors: '[{ "max_age": 180 }]'
+      keepVersionSelectors: '[{"latest": true}, { "max_age": 180 }]'
 
       # -- Defaults to false. Set to true to see the output of what would have been deleted if the task had run.
       dryRun: false
@@ -340,17 +343,33 @@ broker:
     # -- Success threshold for readinessProbe
     successThreshold: 1
 
-  # Volumes to mount
+  # Pact Broker [Pod Disruption Budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget)
+  podDisruptionBudget:
+    # -- Max Unavailable Pods (alternatively one can define `minAvailable`)
+    maxUnavailable: 1
+    # minAvailable: 1
+
+  # -- Volumes to mount
   volumes: []
     # - name: cache-volume
     #   emptyDir:
     #    sizeLimit: 500Mi
 
-  # Volume mounts
+  # -- Volume mounts
   volumeMounts: []
     # - mountPath: <CONTAINER_PATH>
     #   name: <VOLUME_NAME>
     #   readOnly: true
+
+  # -- Additional containers to add to the Pact Broker pods
+  extraContainers: []
+  # extraContainers:
+  #   - name: cloudsql-proxy
+  #     image: gcr.io/cloudsql-docker/gce-proxy:1.22.0
+  #     command:
+  #       - /cloud_sql_proxy
+  #       - '-instances=my-project:my-zone:my-db-name=tcp:5432'
+  #       - '-enable_iam_login'
 
 #  Service configuration
 service:
@@ -485,9 +504,12 @@ serviceAccount:
   # -- Enable the creation of a ServiceAccount for Pact Broker pods
   create: true
 
-  # -- Name of the created ServiceAccount
-  # If not set and `serviceAccount.create` is true, a name is generated
-  name: broker-sa
+  # -- Name of the ServiceAccount
+  # If `serviceAccount.create` is `true` and `serviceAccount.name` is not set, a name is generated based on the release name.
+  # If `serviceAccount.create` is `true` and `serviceAccount.name` is set, a service account is created and named after value set in `serviceAccount.name`
+  # If `serviceAccount.create` is `false` and `serviceAccount.name` is not set, the `default` service account is used for the Deployment.
+  # If `serviceAccount.create` is `false` and `serviceAccount.name` is set, the service account specified at `serviceAccount.name` is used for the Deployment.
+  name: ""
 
 
   # -- Additional custom labels to the service ServiceAccount.
@@ -498,3 +520,6 @@ serviceAccount:
 
   # -- Auto-mount the service account token in the pod
   automountServiceAccountToken: true
+
+  # -- Name of image pull secrets that should be attached to the service account
+  imagePullSecrets: []
