@@ -88,3 +88,10 @@ Configure the Pact Broker by using the username credential that you configure vi
 
 #### Specify Credentials via Secret
 Configure the Pact Broker to use an existing Secret to retrieve the user password as a means to connect to the database. Ensure that the Kubernetes Secret has the password in the `user-password` field and ensure that you have set `externalDatabase.config.auth.existingSecret` value to the name of the secret. To configure the username, you can use the `username` value.
+
+### Database Clean Task
+Pact Broker [automatic data cleanup](https://docs.pact.io/pact_broker/docker_images/pactfoundation#automatic-data-clean-up) can be enabled by setting the property `broker.config.databaseClean.enabled` to `true`.
+
+By default and for simple installations, one could rely on the built-in integrated mode of the cleanup (the property `broker.config.databaseClean.mode` having the value `embedded`).
+
+For a more advanced setup e.g. in highly available installations with more than one replica, one should rely on the [external source pattern](https://docs.pact.io/pact_broker/docker_images/pactfoundation#running-the-clean-task-from-an-external-source) of running the clean task. That can be achieved by setting the property `broker.config.databaseClean.mode` to external, which would result in having a `CronJob` performing the cleanup task instead of the main application Pods.
