@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 0.10.1](https://img.shields.io/badge/Version-0.10.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.105.0.1](https://img.shields.io/badge/AppVersion-2.105.0.1-informational?style=flat-square)
+![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.107.1](https://img.shields.io/badge/AppVersion-2.107.1-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -162,7 +162,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | image.pullSecrets | Array of imagePullSecrets to allow pulling the Pact Broker image from private registries. PS: Secret's must exist in the namespace to which you deploy the Pact Broker. more info [here](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)  Example:   pullSecrets:    - mySecretName  | list | `[]` |
 | image.registry | Pact Broker image registry | string | `"docker.io"` |
 | image.repository | Pact Broker image repository | string | `"pactfoundation/pact-broker"` |
-| image.tag | Pact Broker image tag (immutable tags are recommended) | string | `"2.105.0.1"` |
+| image.tag | Pact Broker image tag (immutable tags are recommended) | string | `"2.112.0-pactbroker2.107.1"` |
 | ingress.annotations | ingress.annotations Additional annotations for the Ingress resource | object | `{}` |
 | ingress.className | ingress.className Name of the IngressClass cluster resource which defines which controller will implement the resource (e.g nginx) | string | `""` |
 | ingress.enabled | ingress.enabled Enable the creation of the ingress resource | bool | `true` |
