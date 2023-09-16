@@ -7,12 +7,12 @@ appVersion: 2.107.1
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 12.11.2
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.11.1
 sources:
   - https://github.com/pact-foundation/pact_broker
