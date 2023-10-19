@@ -140,9 +140,9 @@ spec:
             # Resources
             - name: PACT_BROKER_PORT
               value: {{ .Values.broker.containerPorts.http | quote }}
-            {{- if .Values.broker.config.baseUrls }}
-            - name: PACT_BROKER_BASE_URLS
-              value: {{ .Values.broker.config.baseUrls | quote }}
+            {{- if .Values.broker.config.baseUrl }}
+            - name: PACT_BROKER_BASE_URL
+              value: {{ .Values.broker.config.baseUrl | quote }}
             {{- end }}
             - name: PACT_BROKER_SHIELDS_IO_BASE_URL
               value: {{ .Values.broker.config.shieldsIoBaseUrl | quote }}
