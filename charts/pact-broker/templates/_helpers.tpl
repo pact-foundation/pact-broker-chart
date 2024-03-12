@@ -158,7 +158,16 @@ Database ENV Vars
 - name: PACT_BROKER_DATABASE_NAME
   value: {{ include "broker.databaseName" . }}
 - name: PACT_BROKER_DATABASE_USERNAME
-  value: {{ include "broker.databaseUser" . }}
+  {{- if .Values.postgresql.enabled  }}
+  value: {{ .Values.postgresql.auth.password | quote }}
+  {{- else if and .Values.externalDatabase.enabled .Values.externalDatabase.config.auth.username }}
+  value: {{ .Values.externalDatabase.config.auth.username | quote }}
+  {{- else }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "broker.databaseUserSecretName" . }}
+      key: {{ include "broker.databaseUserSecretKey" . }}
+  {{- end }}
 - name: PACT_BROKER_DATABASE_PASSWORD
   {{- if and .Values.postgresql.enabled .Values.postgresql.auth.password }}
   value: {{ .Values.postgresql.auth.password | quote }}
