@@ -454,6 +454,9 @@ postgresql:
       # -- The key in which Postgres well look for, for the admin password, in the existing Secret
       adminPasswordKey: admin-password
 
+      # -- The key in which Postgres well look for, for the user username, in the existing Secret
+      userUsernameKey: user-username
+
       # -- The key in which Postgres well look for, for the user password, in the existing Secret
       userPasswordKey: user-password
 
@@ -496,6 +499,9 @@ externalDatabase:
 
       # -- Name of an existing Kubernetes secret containing the database credentials
       existingSecret: ""
+
+      # -- The key to which the username will be stored under within existing secret.
+      existingSecretUsernameKey: "user-username"
 
       # -- The key to which the password will be stored under within existing secret.
       existingSecretPasswordKey: "user-password"
