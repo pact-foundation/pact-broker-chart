@@ -380,6 +380,9 @@ service:
   #
   type: "ClusterIP"
 
+  # -- service.annotations Additional annotations for the Service resource
+  annotations: {}
+
   # Service port configuration
   ports:
 
