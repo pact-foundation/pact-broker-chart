@@ -8,7 +8,7 @@ image:
   repository: pactfoundation/pact-broker
 
   # -- Pact Broker image tag (immutable tags are recommended)
-  tag: 2.112.0-pactbroker2.107.1
+  tag: 2.123.0-pactbroker2.112.0
 
   # -- Specify a imagePullPolicy
   # Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
