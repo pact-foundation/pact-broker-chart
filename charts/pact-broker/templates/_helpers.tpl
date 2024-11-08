@@ -76,14 +76,6 @@ Return the database name
 {{- end -}}
 
 {{/*
-Return the Database username
-*/}}
-{{- define "broker.databaseUser" -}}
-{{- ternary .Values.postgresql.auth.username .Values.externalDatabase.config.auth.username .Values.postgresql.enabled | quote -}}
-{{- end -}}
-
-
-{{/*
 Return the Database Secret Name
 */}}
 {{- define "broker.databaseSecretName" -}}
@@ -101,9 +93,28 @@ Return the Database Secret Name
 {{- end -}}
 
 {{/*
+Return the databaseSecret key to retrieve the username for database
+*/}}
+{{- define "broker.databaseSecretUsernameKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- if .Values.postgresql.auth.existingSecret -}}
+        {{- .Values.postgresql.auth.secretKeys.userUsernameKey  -}}
+    {{- else -}}
+        {{- print "username" -}}
+    {{- end -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.enabled }}
+        {{- if .Values.externalDatabase.config.auth.existingSecret -}}
+            {{- .Values.externalDatabase.config.auth.existingSecretUsernameKey -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the databaseSecret key to retrieve credentials for database
 */}}
-{{- define "broker.databaseSecretKey" -}}
+{{- define "broker.databaseSecretPasswordKey" -}}
 {{- if .Values.postgresql.enabled -}}
     {{- if .Values.postgresql.auth.existingSecret -}}
         {{- .Values.postgresql.auth.secretKeys.userPasswordKey  -}}
@@ -158,7 +169,16 @@ Database ENV Vars
 - name: PACT_BROKER_DATABASE_NAME
   value: {{ include "broker.databaseName" . }}
 - name: PACT_BROKER_DATABASE_USERNAME
-  value: {{ include "broker.databaseUser" . }}
+  {{- if and .Values.postgresql.enabled .Values.postgresql.auth.username }}
+  value: {{ .Values.postgresql.auth.username | quote }}
+  {{- else if and .Values.externalDatabase.enabled .Values.externalDatabase.config.auth.username }}
+  value: {{ .Values.externalDatabase.config.auth.username | quote }}
+  {{- else }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "broker.databaseSecretName" . }}
+      key: {{ include "broker.databaseSecretUsernameKey" . }}
+  {{- end }}
 - name: PACT_BROKER_DATABASE_PASSWORD
   {{- if and .Values.postgresql.enabled .Values.postgresql.auth.password }}
   value: {{ .Values.postgresql.auth.password | quote }}
@@ -168,8 +188,7 @@ Database ENV Vars
   valueFrom:
     secretKeyRef:
       name: {{ include "broker.databaseSecretName" . }}
-      key: {{ include "broker.databaseSecretKey" . }}
-  {{- end }}
+      key: {{ include "broker.databaseSecretPasswordKey" . }}
 - name: PACT_BROKER_DATABASE_SSLMODE
   value: {{ .Values.broker.config.databaseSslmode | quote }}
 - name: PACT_BROKER_SQL_LOG_LEVEL
