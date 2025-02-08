@@ -162,7 +162,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | image.pullSecrets | Array of imagePullSecrets to allow pulling the Pact Broker image from private registries. PS: Secret's must exist in the namespace to which you deploy the Pact Broker. more info [here](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)  Example:   pullSecrets:    - mySecretName  | list | `[]` |
 | image.registry | Pact Broker image registry | string | `"docker.io"` |
 | image.repository | Pact Broker image repository | string | `"pactfoundation/pact-broker"` |
-| image.tag | Pact Broker image tag (immutable tags are recommended) | string | `"2.123.0-pactbroker2.112.0"` |
+| image.tag | Pact Broker image tag (immutable tags are recommended) | string | `"2.124.0-pactbroker2.112.0"` |
 | ingress.annotations | ingress.annotations Additional annotations for the Ingress resource | object | `{}` |
 | ingress.className | ingress.className Name of the IngressClass cluster resource which defines which controller will implement the resource (e.g nginx) | string | `""` |
 | ingress.enabled | ingress.enabled Enable the creation of the ingress resource | bool | `true` |
