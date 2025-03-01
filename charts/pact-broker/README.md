@@ -52,7 +52,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | Repository | Name | Version |
 |------------|------|---------|
 | oci://registry-1.docker.io/bitnamicharts | common | 2.29.1 |
-| oci://registry-1.docker.io/bitnamicharts | postgresql | 16.4.9 |
+| oci://registry-1.docker.io/bitnamicharts | postgresql | 16.4.14 |
 
 ## Values
 
