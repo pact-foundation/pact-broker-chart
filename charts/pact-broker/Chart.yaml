@@ -2,13 +2,13 @@ apiVersion: v2
 name: pact-broker
 description: The Pact Broker is an application for sharing for Pact contracts and verification results.
 type: application
-version: 3.0.0
+version: 3.0.1
 appVersion: 2.112.0
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
     repository: oci://registry-1.docker.io/bitnamicharts
-    version: 16.4.9
+    version: 16.4.14
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
