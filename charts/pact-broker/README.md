@@ -118,7 +118,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.config.webhookRetrySchedule | The schedule of seconds to wait between webhook execution attempts. The default schedule is 10 sec, 1 min, 2 min, 5 min, 10 min, 20 min (38 minutes in total). | string | `"10 60 120 300 600 1200"` |
 | broker.config.webhookSchemeWhitelist | The allowed URL schemes for webhooks. | string | `"https"` |
 | broker.containerPorts.http | http port | int | `9292` |
-| broker.containerPorts.https | http port | int | `8443` |
+| broker.containerPorts.https | https port | int | `8443` |
 | broker.containerSecurityContext.enabled | Enable Pact Broker containers' Security Context | bool | `true` |
 | broker.containerSecurityContext.runAsNonRoot | Set Pact Broker container's Security Context runAsNonRoot | bool | `true` |
 | broker.containerSecurityContext.runAsUser | Set Pact Broker container's Security Context runAsUser | int | `1001` |
