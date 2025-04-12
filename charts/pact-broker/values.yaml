@@ -47,7 +47,7 @@ broker:
     # -- http port
     http: 9292
 
-    # -- http port
+    # -- https port
     https: 8443
 
   # Pact Broker pods' [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)

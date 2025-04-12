@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 3.1.1](https://img.shields.io/badge/Version-3.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.112.0](https://img.shields.io/badge/AppVersion-2.112.0-informational?style=flat-square)
+![Version: 3.2.2](https://img.shields.io/badge/Version-3.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.112.0](https://img.shields.io/badge/AppVersion-2.112.0-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -52,7 +52,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | Repository | Name | Version |
 |------------|------|---------|
 | oci://registry-1.docker.io/bitnamicharts | common | 2.30.0 |
-| oci://registry-1.docker.io/bitnamicharts | postgresql | 16.5.6 |
+| oci://registry-1.docker.io/bitnamicharts | postgresql | 16.6.3 |
 
 ## Values
 
@@ -118,7 +118,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.config.webhookRetrySchedule | The schedule of seconds to wait between webhook execution attempts. The default schedule is 10 sec, 1 min, 2 min, 5 min, 10 min, 20 min (38 minutes in total). | string | `"10 60 120 300 600 1200"` |
 | broker.config.webhookSchemeWhitelist | The allowed URL schemes for webhooks. | string | `"https"` |
 | broker.containerPorts.http | http port | int | `9292` |
-| broker.containerPorts.https | http port | int | `8443` |
+| broker.containerPorts.https | https port | int | `8443` |
 | broker.containerSecurityContext.enabled | Enable Pact Broker containers' Security Context | bool | `true` |
 | broker.containerSecurityContext.runAsNonRoot | Set Pact Broker container's Security Context runAsNonRoot | bool | `true` |
 | broker.containerSecurityContext.runAsUser | Set Pact Broker container's Security Context runAsUser | int | `1001` |
