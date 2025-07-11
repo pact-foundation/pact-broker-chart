@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - uses: actions/setup-go@fa96338abe5531f6e34c5cc0bbe28c1a533d5505 # pin@v3
+      - uses: actions/setup-go@7c0b336c9aab5e8ed4f0ad8b81225b125f9883e4 # pin@v3
         with:
           go-version: ^1
 
