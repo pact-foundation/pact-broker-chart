@@ -9,13 +9,13 @@ jobs:
       GO111MODULE: on
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.x'
 
-      - uses: actions/setup-go@8e57b58e57be52ac95949151e2777ffda8501267 # pin@v3
+      - uses: actions/setup-go@e75c3e80bcde46e322cd5845ae46582947c9becd # pin@v3
         with:
           go-version: ^1
 
@@ -23,13 +23,13 @@ jobs:
         run: go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
 
       - name: Run pre-commit
-        uses: pre-commit/action@576ff52938d158a24ac7e009dfa94b1455e7df99 # pin@v3.0.1
+        uses: pre-commit/action@1b06ec171f2f6faa71ed760c4042bd969e4f8b43 # pin@v3.0.1
 
   test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           fetch-depth: 0
 
