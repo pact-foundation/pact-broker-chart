@@ -7,6 +7,15 @@ metadata:
     app.kubernetes.io/name: {{ include "chart.name" . }}
     helm.sh/chart: {{ .Chart.Name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- with .Values.broker.labels -}}
+    {{ toYaml . | trim | nindent 4 }}
+    {{- end }}
+  {{- if .Values.broker.annotations }}
+  annotations:
+    {{- with .Values.broker.annotations -}}
+    {{ toYaml . | trim | nindent 4 }}
+    {{- end }}
+  {{- end }}
 spec:
   replicas: {{ .Values.broker.replicaCount }}
   {{- if .Values.broker.revisionHistoryLimit }}
