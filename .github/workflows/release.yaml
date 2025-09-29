@@ -40,7 +40,7 @@ jobs:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@5b7b28b1cc417bbd34cd8c225a957c9ce9adf7f2 #pin@v3.3.0
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef #pin@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
