@@ -27,6 +27,10 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        postgres-version: ['13', '14', '15', '16', '17']
+    name: Test with PostgreSQL ${{ matrix.postgres-version }}
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -42,12 +46,37 @@ jobs:
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.7.0
-     
+
+      - name: Add Helm repositories
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo update
+
       - name: Run chart-testing (lint)
         run: ct lint --config ct.yaml
 
       - name: Create KIND Cluster
         uses: helm/kind-action@7cd7463a0995e35ab5d0f2c119f892514f3a3778 # pin@v1.12.0
+
+      - name: Deploy PostgreSQL for testing
+        run: |
+          # Replace the PostgreSQL image version in the manifest
+          sed "s/postgres:15-alpine/postgres:${{ matrix.postgres-version }}-alpine/g" .github/ci-postgres.yaml | kubectl apply -f -
+
+          echo "Waiting for PostgreSQL ${{ matrix.postgres-version }} to be ready..."
+          kubectl wait --for=condition=ready pod -l app=postgres --timeout=120s
+          echo "PostgreSQL deployment status:"
+          kubectl get pods -l app=postgres
+          kubectl get svc postgres
+
+          # Verify PostgreSQL is accepting connections
+          echo "Verifying PostgreSQL ${{ matrix.postgres-version }} connectivity..."
+          kubectl run postgres-test --image=postgres:${{ matrix.postgres-version }}-alpine --rm -i --restart=Never --env="PGPASSWORD=pactbroker-password" -- \
+            psql -h postgres -U pactbroker -d pactbroker -c "SELECT version();" || true
+
+          # Show the secrets created for the Pact Broker
+          echo "Available secrets:"
+          kubectl get secrets pact-broker-db-secret
 
       - name: Run chart-testing (install)
         run: ct install --config ct-install.yaml

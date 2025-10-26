@@ -1,0 +1,123 @@
+---
+# PostgreSQL deployment for CI testing
+# This creates a simple PostgreSQL instance in the default namespace
+# for testing the Pact Broker with external database configuration
+# We create:
+# `postgres-config` - a ConfigMap to configure the PostgreSQL instance
+# `postgres-pvc` - a PersistentVolumeClaim for the PostgreSQL data
+# `postgres` - a Deployment for the PostgreSQL instance
+# `postgres` - a Service for the PostgreSQL instance
+# `pact-broker-db-secret` - a Secret for the Pact Broker database password in order
+#                            to be used by the Pact Broker to connect to the database
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: default
+data:
+  POSTGRES_DB: "pactbroker"
+  POSTGRES_USER: "pactbroker"
+  POSTGRES_PASSWORD: "pactbroker-password"
+---
+# Create a secret that the Pact Broker will use
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pact-broker-db-secret
+  namespace: default
+type: Opaque
+stringData:
+  database-password: "pactbroker-password"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5432
+          name: postgres
+        envFrom:
+        - configMapRef:
+            name: postgres-config
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-storage
+          subPath: postgres
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - pactbroker
+            - -d
+            - pactbroker
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - pactbroker
+            - -d
+            - pactbroker
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgres

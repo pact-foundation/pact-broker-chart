@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 3.3.6](https://img.shields.io/badge/Version-3.3.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.112.0](https://img.shields.io/badge/AppVersion-2.112.0-informational?style=flat-square)
+![Version: 4.0.0](https://img.shields.io/badge/Version-4.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.112.0](https://img.shields.io/badge/AppVersion-2.112.0-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -52,7 +52,6 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | Repository | Name | Version |
 |------------|------|---------|
 | oci://registry-1.docker.io/bitnamicharts | common | 2.31.4 |
-| oci://registry-1.docker.io/bitnamicharts | postgresql | 16.7.24 |
 
 ## Values
 
@@ -149,15 +148,14 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.tolerations | Pact Broker [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) | list | `[]` |
 | broker.volumeMounts | Volume mounts | list | `[]` |
 | broker.volumes | Volumes to mount | list | `[]` |
-| externalDatabase.config.adapter | Database engine to use. Only allowed values are `postgres` or `sqlite`. More info [here](https://docs.pact.io/pact_broker/docker_images/pactfoundation#getting-started) | string | `""` |
-| externalDatabase.config.auth.existingSecret | Name of an existing Kubernetes secret containing the database credentials | string | `""` |
-| externalDatabase.config.auth.existingSecretPasswordKey | The key to which the password will be stored under within existing secret. | string | `"user-password"` |
-| externalDatabase.config.auth.password | Password for the non-root username for the Pact Broker | string | `""` |
-| externalDatabase.config.auth.username | Non-root username for the Pact Broker | string | `""` |
-| externalDatabase.config.databaseName | External database name | string | `""` |
-| externalDatabase.config.host | Database host | string | `""` |
-| externalDatabase.config.port | Database port number | string | `""` |
-| externalDatabase.enabled | Switch to enable or disable the externalDatabase connection | bool | `false` |
+| database.adapter | Database engine to use. Only allowed values are `postgres` or `sqlite`. More info [here](https://docs.pact.io/pact_broker/docker_images/pactfoundation#getting-started) | string | `""` |
+| database.auth.existingSecret | Name of an existing Kubernetes secret containing the database credentials | string | `""` |
+| database.auth.existingSecretPasswordKey | The key to which the password will be stored under within existing secret. | string | `"user-password"` |
+| database.auth.password | Password for the non-root username for the Pact Broker | string | `""` |
+| database.auth.username | Non-root username for the Pact Broker | string | `""` |
+| database.databaseName | External database name | string | `""` |
+| database.host | Database host | string | `""` |
+| database.port | Database port number | string | `""` |
 | image.pullPolicy | Specify a imagePullPolicy Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent' more info [here](https://kubernetes.io/docs/user-guide/images/#pre-pulling-images)  | string | `"IfNotPresent"` |
 | image.pullSecrets | Array of imagePullSecrets to allow pulling the Pact Broker image from private registries. PS: Secret's must exist in the namespace to which you deploy the Pact Broker. more info [here](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)  Example:   pullSecrets:    - mySecretName  | list | `[]` |
 | image.registry | Pact Broker image registry | string | `"docker.io"` |
@@ -169,16 +167,6 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | ingress.host | host Hostname to be used to expose the route to access the Pact Broker | string | `""` |
 | ingress.tls.enabled | ingress.tls.enabled Enable TLS configuration for the host defined at `ingress.host` parameter | bool | `false` |
 | ingress.tls.secretName | ingress.tls.secretName The name to which the TLS Secret will be called | string | `""` |
-| postgresql.architecture | PostgreSQL architecture (`standalone` or `replication`) | string | `"standalone"` |
-| postgresql.auth.database | Name for a custom database to create | string | `"bitnami_broker"` |
-| postgresql.auth.existingSecret | Name of existing secret to use for PostgreSQL credentials | string | `""` |
-| postgresql.auth.password | Password for the custom user to create | string | `""` |
-| postgresql.auth.secretKeys.adminPasswordKey | The key in which Postgres well look for, for the admin password, in the existing Secret | string | `"admin-password"` |
-| postgresql.auth.secretKeys.replicationPasswordKey | The key in which Postgres well look for, for the replication password, in the existing Secret | string | `"replication-password"` |
-| postgresql.auth.secretKeys.userPasswordKey | The key in which Postgres well look for, for the user password, in the existing Secret | string | `"user-password"` |
-| postgresql.auth.username | Name for a custom user to create | string | `"bn_broker"` |
-| postgresql.enabled | Switch to enable or disable the PostgreSQL helm chart | bool | `true` |
-| postgresql.image | Change default PostgreSQL image location (workaround for https://github.com/bitnami/charts/issues/35164) | object | `{"registry":"docker.io","repository":"bitnamilegacy/postgresql"}` |
 | service.annotations | service.annotations Additional annotations for the Service resource | object | `{}` |
 | service.clusterIP | Pact Broker service clusterIP | string | `""` |
 | service.loadBalancerIP | Pact Broker Service [loadBalancerIP](https://kubernetes.io/docs/user-guide/services/#type-loadbalancer) | string | `""` |
@@ -196,38 +184,30 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 
 ## Configuration and Installation Details
 
-### Configuring Chart PostgreSQL
+### Database Configuration
 
-With the Pact Broker Helm Chart, it bundles together the Pact Broker and a Bitnami PostgreSQL database - this can be enabled by switching `postgresql.enabled` to true (it is `true` by default). If switched on, the Helm Chart, on deployment, will automatically deploy a PostgreSQL instance and configure it with the credentials you specify. There are multiple ways of doing this that will be detailed below.
+> **⚠️ BREAKING CHANGE in v4.0.0:** The bundled PostgreSQL subchart has been removed due to licensing changes. You must now provide your own PostgreSQL instance.
 
-#### Automatic Database Credential Creation
-This is the easiest of the configuration options. Here, the credentials for both the Admin and Database user will be automatically generated and put into a Kubernetes secret. This then will be automatically used by the Pact Broker. For this, ensure the following happens:
-  - Keep `postgresql.auth.existingSecret` & `postgresql.auth.password` empty.
+Starting with version 4.0.0, this Helm chart requires an external PostgreSQL database. You can use:
+- Cloud-managed databases (AWS RDS, Google Cloud SQL, Azure Database for PostgreSQL)
+- Self-hosted PostgreSQL instances
+- Kubernetes operators (CloudNativePG, Zalando PostgreSQL Operator)
+- Any PostgreSQL-compatible database
 
-#### Specifying Password for PostgreSQL to Use
-Here, you can specify the password that you want PostgreSQL to use for it's Database User (The user that the Pact Broker will use to connect to the database). For this, ensure the following happens:
-  - Keep the `postgresql.auth.existingSecret` empty.
-  - Set the `postgresql.auth.password` to the value that you want the User password to be.
-  > **_NOTE:_** Be careful and mindful that the value you provide here is done in a secure way.
+Configure the database connection by setting the following values:
+- `database.host` - Database hostname or IP address
+- `database.port` - Database port (defaults to 5432)
+- `database.adapter` - Database adapter (defaults to "postgres", can also be "sqlite")
+- `database.databaseName` - Name of the database
 
-#### Specifying Existing Secret for PostgreSQL to Use
-Here, you can specify an existing Kubernetes secret that you have created that contains the Password that you want PostgreSQL to use. The secret has to be in the same namespace as where you are deploying the Helm Chart. For this, ensure the following happens:
-  - Create the Kubernetes secret with the Password inside.
-  - Set `postgresql.auth.existingSecret` to the name of the Secret
-  - PostgreSQL by default will look for the relevant Password keys that are set by default here `postgresql.auth.secretKeys`. So make sure that the Keys in the Secret match the default `secretKeys` values. More information [here](https://artifacthub.io/packages/helm/bitnami/postgresql)
-  - For example, if you want PostgreSQL to use an existing Secret called `my-user-secret` that has the User password that you want to use inside it. Make sure that you create a Key inside that secret called `user-password` (this key can be found here `postgresql.auth.secretKeys.userPasswordKey`). i.e. `user-password=Password123`.
-
-### Configuring External Database
-If you want to use an external database with your Pact Broker, switch the `externalDatabase.enabled` flag to true and the `postgresql.enabled` to false.
-
-The configuring of the `externalDatabase.config.host`, `externalDatabase.config.port`, `externalDatabase.config.adapter` and `externalDatabase.config.databaseName` should be pretty straight forward. The credential configuration however has two methods of configuration.
+The credential configuration has two methods:
 
 #### Specify Credentials via Values
-Configure the Pact Broker by using the username credential that you configure via the `externalDatabase.config.auth.username` value and the password via the `externalDatabase.config.auth.password` value.
+Configure the Pact Broker by using the username credential that you configure via the `database.auth.username` value and the password via the `database.auth.password` value.
   > **_NOTE:_** Be careful and mindful that the values you provide here is done in a secure way.
 
 #### Specify Credentials via Secret
-Configure the Pact Broker to use an existing Secret to retrieve the user password as a means to connect to the database. Ensure that the Kubernetes Secret has the password in the `user-password` field and ensure that you have set `externalDatabase.config.auth.existingSecret` value to the name of the secret. To configure the username, you can use the `username` value.
+Configure the Pact Broker to use an existing Secret to retrieve the user password as a means to connect to the database. Ensure that the Kubernetes Secret has the password in the `user-password` field and ensure that you have set `database.auth.existingSecret` value to the name of the secret. To configure the username, you can use the `username` value.
 
 ### Database Clean Task
 Pact Broker [automatic data cleanup](https://docs.pact.io/pact_broker/docker_images/pactfoundation#automatic-data-clean-up) can be enabled by setting the property `broker.config.databaseClean.enabled` to `true`.

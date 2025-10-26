@@ -3,3 +3,4 @@ chart-dirs:
 validate-maintainers: false
 remote: origin
 target-branch: master
+namespace: default

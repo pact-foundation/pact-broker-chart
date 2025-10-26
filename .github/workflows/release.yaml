@@ -30,6 +30,7 @@ jobs:
       
       - name: Add dependencies
         run: |
+          # Still need bitnami repo for the common chart dependency
           helm repo add bitnami https://charts.bitnami.com/bitnami
 
       - name: Run chart-releaser

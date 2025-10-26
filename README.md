@@ -10,11 +10,17 @@ We are always looking for maintainers, please let us know if you'd be interested
 
 ## TL;DR
 
-```console
-helm repo add bitnami https://charts.bitnami.com/bitnami
+> **⚠️ IMPORTANT:** As of v4.0.0, you must provide your own PostgreSQL database. The bundled PostgreSQL subchart has been removed. More info can be found [here](https://github.com/pact-foundation/pact-broker-chart/issues/194).
+
+```shell
 helm repo add pact-broker https://pact-foundation.github.io/pact-broker-chart/
 
-helm install pact-broker pact-broker/pact-broker
+# Install with external database configuration
+helm install pact-broker pact-broker/pact-broker \
+  --set database.host=your-postgres-host \
+  --set database.databaseName=pactbroker \
+  --set database.auth.username=pactbroker \
+  --set database.auth.password=your-password
 ```
 
 ## Usage
@@ -44,7 +50,11 @@ Charts are also available in OCI format. The list of available charts can be fou
 Install one of the available charts:
 
 ```shell
-helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/pact-broker --version=<version>
+helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/pact-broker --version=<version> \
+  --set database.host=your-postgres-host \
+  --set database.databaseName=pactbroker \
+  --set database.auth.username=pactbroker \
+  --set database.auth.password=your-password
 ```
 
 ## Contributing
