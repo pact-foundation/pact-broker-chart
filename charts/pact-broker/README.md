@@ -178,6 +178,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | postgresql.auth.secretKeys.userPasswordKey | The key in which Postgres well look for, for the user password, in the existing Secret | string | `"user-password"` |
 | postgresql.auth.username | Name for a custom user to create | string | `"bn_broker"` |
 | postgresql.enabled | Switch to enable or disable the PostgreSQL helm chart | bool | `true` |
+| postgresql.image | Change default PostgreSQL image location (workaround for https://github.com/bitnami/charts/issues/35164) | object | `{"registry":"docker.io","repository":"bitnamilegacy/postgresql"}` |
 | service.annotations | service.annotations Additional annotations for the Service resource | object | `{}` |
 | service.clusterIP | Pact Broker service clusterIP | string | `""` |
 | service.loadBalancerIP | Pact Broker Service [loadBalancerIP](https://kubernetes.io/docs/user-guide/services/#type-loadbalancer) | string | `""` |
