@@ -7,12 +7,12 @@
     {
       "description": "Configure versioning for Pact Broker Docker image",
       "matchPackageNames": [
-        "pactfoundation/pact-broker"
+        "ghcr.io/pact-foundation/pact-broker"
       ],
       "matchDatasources": [
         "docker"
       ],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-pactbroker(?<compatibility>.*))?$"
+      "versioning": "loose"
     }
   ],
   "customManagers": [
@@ -20,14 +20,14 @@
       "customType": "regex",
       "description": "Update Pact Broker Docker image version in Helm values",
       "managerFilePatterns": [
-        "/^charts/pact-broker/values\\.yaml$/"
+        "charts/pact-broker/values\\.yaml"
       ],
       "matchStrings": [
-        "repository: pactfoundation/pact-broker[\\s\\S]*?tag: (?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+-pactbroker[0-9]+\\.[0-9]+\\.[0-9]+)"
+        "image: ghcr\\.io/pact-foundation/pact-broker:(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+-pactbroker[0-9]+\\.[0-9]+\\.[0-9]+)"
       ],
       "datasourceTemplate": "docker",
-      "packageNameTemplate": "pactfoundation/pact-broker",
-      "versioningTemplate": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-pactbroker(?<compatibility>.*))?$"
+      "packageNameTemplate": "ghcr.io/pact-foundation/pact-broker",
+      "versioningTemplate": "loose"
     }
   ]
 }
