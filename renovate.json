@@ -6,15 +6,22 @@
   "packageRules": [
     {
       "description": "Configure versioning for Pact Broker Docker image",
-      "matchPackageNames": ["pactfoundation/pact-broker"],
-      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "pactfoundation/pact-broker"
+      ],
+      "matchDatasources": [
+        "docker"
+      ],
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-pactbroker(?<compatibility>.*))?$"
     }
   ],
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "description": "Update Pact Broker Docker image version in Helm values",
-      "fileMatch": ["^charts/pact-broker/values\\.yaml$"],
+      "managerFilePatterns": [
+        "/^charts/pact-broker/values\\.yaml$/"
+      ],
       "matchStrings": [
         "# -- Pact Broker image tag \\(immutable tags are recommended\\)\\s+tag:\\s+(?<currentValue>.*?)\\s"
       ],
