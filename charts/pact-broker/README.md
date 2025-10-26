@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 3.3.4](https://img.shields.io/badge/Version-3.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.112.0](https://img.shields.io/badge/AppVersion-2.112.0-informational?style=flat-square)
+![Version: 3.3.5](https://img.shields.io/badge/Version-3.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.112.0](https://img.shields.io/badge/AppVersion-2.112.0-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -178,6 +178,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | postgresql.auth.secretKeys.userPasswordKey | The key in which Postgres well look for, for the user password, in the existing Secret | string | `"user-password"` |
 | postgresql.auth.username | Name for a custom user to create | string | `"bn_broker"` |
 | postgresql.enabled | Switch to enable or disable the PostgreSQL helm chart | bool | `true` |
+| postgresql.image | Change default PostgreSQL image location (workaround for https://github.com/bitnami/charts/issues/35164) | object | `{"registry":"docker.io","repository":"bitnamilegacy/postgresql"}` |
 | service.annotations | service.annotations Additional annotations for the Service resource | object | `{}` |
 | service.clusterIP | Pact Broker service clusterIP | string | `""` |
 | service.loadBalancerIP | Pact Broker Service [loadBalancerIP](https://kubernetes.io/docs/user-guide/services/#type-loadbalancer) | string | `""` |
