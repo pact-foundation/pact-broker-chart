@@ -29,10 +29,7 @@ This allows us to not have image: .Values.xxxx.ssss/.Values.xxx.xxx:.Values.ssss
 in every single template.
 */}}
 {{- define "broker.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $imageName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag -}}
-{{- printf "%s/%s:%s" $registryName $imageName $tag -}}
+{{- .Values.broker.image -}}
 {{- end -}}
 
 {{/*

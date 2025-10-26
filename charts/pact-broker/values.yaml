@@ -1,20 +1,14 @@
-# Pact Broker image information
-image:
+# Broker configuration
+broker:
 
-  # -- Pact Broker image registry
-  registry: docker.io
-
-  # -- Pact Broker image repository
-  repository: pactfoundation/pact-broker
-
-  # -- Pact Broker image tag (immutable tags are recommended)
-  tag: 2.124.0-pactbroker2.112.0
+  # -- Pact Broker image url
+  image: docker.io/pactfoundation/pact-broker:2.124.0-pactbroker2.112.0
 
   # -- Specify a imagePullPolicy
   # Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   # more info [here](https://kubernetes.io/docs/user-guide/images/#pre-pulling-images)
   #
-  pullPolicy: IfNotPresent
+  imagePullPolicy: IfNotPresent
 
   # -- Array of imagePullSecrets to allow pulling the Pact Broker image from private registries.
   # PS: Secret's must exist in the namespace to which you deploy the Pact Broker.
@@ -24,10 +18,7 @@ image:
   #   pullSecrets:
   #    - mySecretName
   #
-  pullSecrets: []
-
-# Broker configuration
-broker:
+  imagePullSecrets: []
 
   # -- Additional labels that can be added to the Broker deployment
   labels: {}

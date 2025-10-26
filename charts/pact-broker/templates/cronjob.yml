@@ -19,7 +19,7 @@ spec:
           containers:
             - name: {{ template "chart.fullname" . }}-dbclean
               image: {{ template "broker.image" . }}
-              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              imagePullPolicy: {{ .Values.broker.imagePullPolicy }}
               command:
                 - clean
               env:

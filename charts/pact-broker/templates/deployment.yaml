@@ -42,9 +42,9 @@ spec:
     spec:
       serviceAccountName: {{ include "broker.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
-      {{- if .Values.image.pullSecrets }}
+      {{- if .Values.broker.imagePullSecrets }}
       imagePullSecrets:
-      {{- range .Values.image.pullSecrets }}
+      {{- range .Values.broker.imagePullSecrets }}
         - name: {{ . }}
       {{- end }}
       {{- end }}
@@ -54,7 +54,7 @@ spec:
       containers:
         - name: {{ template "chart.fullname" . }}
           image: {{ template "broker.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.broker.imagePullPolicy }}
           {{- if .Values.broker.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.broker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
