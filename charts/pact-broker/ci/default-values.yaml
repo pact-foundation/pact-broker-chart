@@ -1,0 +1,10 @@
+# CI test values for the Pact Broker deployment when using an external database
+# with credentials that are specified in the values file.
+database:
+  host: "postgres.default.svc.cluster.local"
+  port: "5432"
+  adapter: "postgres"
+  databaseName: "pactbroker"
+  auth:
+    username: "pactbroker"
+    password: "pactbroker-password"

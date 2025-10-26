@@ -42,12 +42,35 @@ jobs:
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.7.0
-     
+
+      - name: Add Helm repositories
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo update
+
       - name: Run chart-testing (lint)
         run: ct lint --config ct.yaml
 
       - name: Create KIND Cluster
         uses: helm/kind-action@7cd7463a0995e35ab5d0f2c119f892514f3a3778 # pin@v1.12.0
+
+      - name: Deploy PostgreSQL for testing
+        run: |
+          kubectl apply -f .github/ci-postgres.yaml
+          echo "Waiting for PostgreSQL to be ready..."
+          kubectl wait --for=condition=ready pod -l app=postgres --timeout=120s
+          echo "PostgreSQL deployment status:"
+          kubectl get pods -l app=postgres
+          kubectl get svc postgres
+
+          # Verify PostgreSQL is accepting connections
+          echo "Verifying PostgreSQL connectivity..."
+          kubectl run postgres-test --image=postgres:15-alpine --rm -i --restart=Never --env="PGPASSWORD=pactbroker-password" -- \
+            psql -h postgres -U pactbroker -d pactbroker -c "SELECT version();" || true
+
+          # Show the secrets created for the Pact Broker
+          echo "Available secrets:"
+          kubectl get secrets pact-broker-db-secret
 
       - name: Run chart-testing (install)
         run: ct install --config ct-install.yaml

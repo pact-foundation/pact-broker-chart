@@ -36,67 +36,11 @@ in every single template.
 {{- end -}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "broker.postgresql.fullname" -}}
-{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
-{{- end -}}
-
-{{/*
-Return the Database hostname
-*/}}
-{{- define "broker.databaseHost" -}}
-{{- if eq .Values.postgresql.architecture "replication" }}
-{{- ternary (include "broker.postgresql.fullname" .) .Values.externalDatabase.config.host .Values.postgresql.enabled -}}-primary
-{{- else -}}
-{{- ternary (include "broker.postgresql.fullname" .) .Values.externalDatabase.config.host .Values.postgresql.enabled -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the Database port
-*/}}
-{{- define "broker.databasePort" -}}
-{{- ternary "5432" .Values.externalDatabase.config.port .Values.postgresql.enabled | quote -}}
-{{- end -}}
-
-{{/*
-Return the databaseAdapter configured
-*/}}
-{{- define "broker.databaseAdapter" -}}
-{{- ternary "postgres" .Values.externalDatabase.config.adapter .Values.postgresql.enabled | quote -}}
-{{- end -}}
-
-{{/*
-Return the database name
-*/}}
-{{- define "broker.databaseName" -}}
-{{- ternary .Values.postgresql.auth.database .Values.externalDatabase.config.databaseName .Values.postgresql.enabled | quote -}}
-{{- end -}}
-
-{{/*
-Return the Database username
-*/}}
-{{- define "broker.databaseUser" -}}
-{{- ternary .Values.postgresql.auth.username .Values.externalDatabase.config.auth.username .Values.postgresql.enabled | quote -}}
-{{- end -}}
-
-
-{{/*
 Return the Database Secret Name
 */}}
 {{- define "broker.databaseSecretName" -}}
-{{- if .Values.postgresql.enabled }}
-    {{- if .Values.postgresql.auth.existingSecret }}
-        {{- tpl .Values.postgresql.auth.existingSecret $ -}}
-    {{- else -}}
-        {{- default (include "broker.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.externalDatabase.enabled }}
-        {{- .Values.externalDatabase.config.auth.existingSecret -}}
-    {{- end -}}
+{{- if .Values.database.auth.existingSecret }}
+    {{- .Values.database.auth.existingSecret -}}
 {{- end -}}
 {{- end -}}
 
@@ -104,18 +48,8 @@ Return the Database Secret Name
 Return the databaseSecret key to retrieve credentials for database
 */}}
 {{- define "broker.databaseSecretKey" -}}
-{{- if .Values.postgresql.enabled -}}
-    {{- if .Values.postgresql.auth.existingSecret -}}
-        {{- .Values.postgresql.auth.secretKeys.userPasswordKey  -}}
-    {{- else -}}
-        {{- print "password" -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.externalDatabase.enabled }}
-        {{- if .Values.externalDatabase.config.auth.existingSecret -}}
-            {{- .Values.externalDatabase.config.auth.existingSecretPasswordKey -}}
-        {{- end -}}
-    {{- end -}}
+{{- if .Values.database.auth.existingSecret -}}
+    {{- .Values.database.auth.existingSecretPasswordKey -}}
 {{- end -}}
 {{- end -}}
 
@@ -150,20 +84,18 @@ Database ENV Vars
 */}}
 {{- define "envVars.db" -}}
 - name: PACT_BROKER_DATABASE_ADAPTER
-  value: {{ include "broker.databaseAdapter" . }}
+  value: {{ .Values.database.adapter | default "postgres" | quote }}
 - name: PACT_BROKER_DATABASE_HOST
-  value: {{ include "broker.databaseHost" . }}
+  value: {{ .Values.database.host }}
 - name: PACT_BROKER_DATABASE_PORT
-  value: {{ include "broker.databasePort" . }}
+  value: {{ .Values.database.port | default "5432" | quote }}
 - name: PACT_BROKER_DATABASE_NAME
-  value: {{ include "broker.databaseName" . }}
+  value: {{ .Values.database.databaseName | quote }}
 - name: PACT_BROKER_DATABASE_USERNAME
-  value: {{ include "broker.databaseUser" . }}
+  value: {{ .Values.database.auth.username | quote }}
 - name: PACT_BROKER_DATABASE_PASSWORD
-  {{- if and .Values.postgresql.enabled .Values.postgresql.auth.password }}
-  value: {{ .Values.postgresql.auth.password | quote }}
-  {{- else if and .Values.externalDatabase.enabled .Values.externalDatabase.config.auth.password }}
-  value: {{ .Values.externalDatabase.config.auth.password | quote }}
+  {{- if .Values.database.auth.password }}
+  value: {{ .Values.database.auth.password | quote }}
   {{- else }}
   valueFrom:
     secretKeyRef:

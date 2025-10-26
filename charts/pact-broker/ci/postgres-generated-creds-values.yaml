@@ -1,8 +1,0 @@
-postgresql:
-  enabled: true
-
-  # we enable postgres and allow the subchart to automatically generate the credentials
-  # that backstage will use
-  auth:
-    existingSecret: ""
-    password: ""

@@ -430,83 +430,39 @@ ingress:
     # -- ingress.tls.secretName The name to which the TLS Secret will be called
     secretName: ""
 
-# PostgreSQL [chart configuration](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml)
-postgresql:
+# Database configuration
+# Note: As of v4.0.0, only external databases are supported. The bundled PostgreSQL subchart has been removed.
+# You must provide your own PostgreSQL instance (cloud-managed, self-hosted, or via an operator).
+# Examples: AWS RDS, Google Cloud SQL, Azure Database, or self-managed PostgreSQL
+database:
 
-  # -- Switch to enable or disable the PostgreSQL helm chart
-  enabled: true
+  # -- Database host
+  host: ""
 
-    # -- Change default PostgreSQL image location (workaround for https://github.com/bitnami/charts/issues/35164)
-  image:
-    registry: docker.io
-    repository: bitnamilegacy/postgresql
+  # -- Database port number
+  port: ""
 
-  # The authentication details of the Postgres database
+  # -- Database engine to use.
+  # Only allowed values are `postgres` or `sqlite`. More info [here](https://docs.pact.io/pact_broker/docker_images/pactfoundation#getting-started)
+  adapter: ""
+
+  # -- External database name
+  databaseName: ""
+
+  # External database auth details that the Pact Broker will use to connect
   auth:
 
-    # -- Name for a custom user to create
-    username: bn_broker
+    # -- Non-root username for the Pact Broker
+    username: ""
 
-    # -- Password for the custom user to create
+    # -- Password for the non-root username for the Pact Broker
     password: ""
 
-    # -- Name for a custom database to create
-    database: bitnami_broker
-
-    # -- Name of existing secret to use for PostgreSQL credentials
+    # -- Name of an existing Kubernetes secret containing the database credentials
     existingSecret: ""
 
-    # The secret keys Postgres will look for to retrieve the relevant password
-    secretKeys:
-
-      # -- The key in which Postgres well look for, for the admin password, in the existing Secret
-      adminPasswordKey: admin-password
-
-      # -- The key in which Postgres well look for, for the user password, in the existing Secret
-      userPasswordKey: user-password
-
-      # -- The key in which Postgres well look for, for the replication password, in the existing Secret
-      replicationPasswordKey: replication-password
-
-  # -- PostgreSQL architecture (`standalone` or `replication`)
-  architecture: standalone
-
-# External database configuration
-externalDatabase:
-
-  # -- Switch to enable or disable the externalDatabase connection
-  enabled: false
-
-  # External Database Configuration
-  config:
-
-    # -- Database host
-    host: ""
-
-    # -- Database port number
-    port: ""
-
-    # -- Database engine to use.
-    # Only allowed values are `postgres` or `sqlite`. More info [here](https://docs.pact.io/pact_broker/docker_images/pactfoundation#getting-started)
-    adapter: ""
-
-    # -- External database name
-    databaseName: ""
-
-    # External database auth details that the Pact Broker will use to connect
-    auth:
-
-      # -- Non-root username for the Pact Broker
-      username: ""
-
-      # -- Password for the non-root username for the Pact Broker
-      password: ""
-
-      # -- Name of an existing Kubernetes secret containing the database credentials
-      existingSecret: ""
-
-      # -- The key to which the password will be stored under within existing secret.
-      existingSecretPasswordKey: "user-password"
+    # -- The key to which the password will be stored under within existing secret.
+    existingSecretPasswordKey: "user-password"
 
 # Service Account Configuration
 serviceAccount:
