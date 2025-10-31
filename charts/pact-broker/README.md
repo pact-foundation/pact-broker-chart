@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 5.2.0](https://img.shields.io/badge/Version-5.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.116.0](https://img.shields.io/badge/AppVersion-2.116.0-informational?style=flat-square)
+![Version: 5.3.0](https://img.shields.io/badge/Version-5.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.117.0](https://img.shields.io/badge/AppVersion-2.117.0-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -122,7 +122,7 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.containerSecurityContext.runAsNonRoot | Set Pact Broker container's Security Context runAsNonRoot | bool | `true` |
 | broker.containerSecurityContext.runAsUser | Set Pact Broker container's Security Context runAsUser | int | `1001` |
 | broker.extraContainers | Additional containers to add to the Pact Broker pods | list | `[]` |
-| broker.image | Pact Broker image url | string | `"ghcr.io/pact-foundation/pact-broker:2.133.0-pactbroker2.116.0"` |
+| broker.image | Pact Broker image url | string | `"ghcr.io/pact-foundation/pact-broker:2.134.0-pactbroker2.117.0"` |
 | broker.imagePullPolicy | Specify a imagePullPolicy Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent' more info [here](https://kubernetes.io/docs/user-guide/images/#pre-pulling-images)  | string | `"IfNotPresent"` |
 | broker.imagePullSecrets | Array of imagePullSecrets to allow pulling the Pact Broker image from private registries. PS: Secret's must exist in the namespace to which you deploy the Pact Broker. more info [here](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)  Example:   pullSecrets:    - mySecretName  | list | `[]` |
 | broker.labels | Additional labels that can be added to the Broker deployment | object | `{}` |
