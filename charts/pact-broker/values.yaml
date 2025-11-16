@@ -2,7 +2,7 @@
 broker:
 
   # -- Pact Broker image url
-  image: ghcr.io/pact-foundation/pact-broker:2.134.0-pactbroker2.117.0
+  image: ghcr.io/pact-foundation/pact-broker:2.135.0-pactbroker2.117.1
 
   # -- Specify a imagePullPolicy
   # Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
