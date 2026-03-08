@@ -48,7 +48,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Cosign
-        uses: sigstore/cosign-installer@a6fdd19182ff7fb86ae39a9329ba29eb602cbabb #pin@v3.7.0
+        uses: sigstore/cosign-installer@351ea76151ae2dbbf52374c9dd639f4981de944f #pin@v3.7.0
 
       - name: Publish and Sign OCI Charts
         run: |
