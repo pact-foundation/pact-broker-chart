@@ -41,14 +41,14 @@ jobs:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 #pin@v3.3.0
+        uses: docker/login-action@db14339dbc0a1f0b184157be94b23a2138122354 #pin@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Cosign
-        uses: sigstore/cosign-installer@430b6a704fe0c92f1b1261d84376a900f38d90ff #pin@v3.7.0
+        uses: sigstore/cosign-installer@351ea76151ae2dbbf52374c9dd639f4981de944f #pin@v3.7.0
 
       - name: Publish and Sign OCI Charts
         run: |
