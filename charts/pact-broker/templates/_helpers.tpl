@@ -29,7 +29,11 @@ This allows us to not have image: .Values.xxxx.ssss/.Values.xxx.xxx:.Values.ssss
 in every single template.
 */}}
 {{- define "broker.image" -}}
+{{- if kindIs "string" .Values.broker.image -}}
 {{- .Values.broker.image -}}
+{{- else -}}
+{{- printf "%s:%s" .Values.broker.image.repository .Values.broker.image.tag -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
