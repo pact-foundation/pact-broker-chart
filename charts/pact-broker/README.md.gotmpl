@@ -56,6 +56,10 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 
 ## Configuration and Installation Details
 
+### Image Configuration
+
+> **⚠️ BREAKING CHANGE in v6.0.0:** `broker.image` is now an object with `repository` and `tag` sub-fields. The previous single-string format is still accepted for backward compatibility.
+
 ### Database Configuration
 
 > **⚠️ BREAKING CHANGE in v4.0.0:** The bundled PostgreSQL subchart has been removed due to licensing changes. You must now provide your own PostgreSQL instance.
