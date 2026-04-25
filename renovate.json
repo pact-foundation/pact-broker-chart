@@ -23,10 +23,9 @@
         "charts/pact-broker/values\\.yaml"
       ],
       "matchStrings": [
-        "image: ghcr\\.io/pact-foundation/pact-broker:(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+-pactbroker[0-9]+\\.[0-9]+\\.[0-9]+)"
+        "repository:\\s*(?<depName>ghcr\\.io/pact-foundation/pact-broker)\\s*\\n(?:\\s*#.*\\n)*\\s*tag:\\s*(?<currentValue>[^\\s]+)"
       ],
       "datasourceTemplate": "docker",
-      "packageNameTemplate": "ghcr.io/pact-foundation/pact-broker",
       "versioningTemplate": "loose"
     }
   ]

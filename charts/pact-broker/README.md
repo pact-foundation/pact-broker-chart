@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 5.5.1](https://img.shields.io/badge/Version-5.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.118.0](https://img.shields.io/badge/AppVersion-2.118.0-informational?style=flat-square)
+![Version: 6.0.0](https://img.shields.io/badge/Version-6.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.118.0](https://img.shields.io/badge/AppVersion-2.118.0-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -122,7 +122,9 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.containerSecurityContext.runAsNonRoot | Set Pact Broker container's Security Context runAsNonRoot | bool | `true` |
 | broker.containerSecurityContext.runAsUser | Set Pact Broker container's Security Context runAsUser | int | `1001` |
 | broker.extraContainers | Additional containers to add to the Pact Broker pods | list | `[]` |
-| broker.image | Pact Broker image url | string | `"ghcr.io/pact-foundation/pact-broker:2.137.0-pactbroker2.118.0"` |
+| broker.image | Pact Broker image configuration | object | `{"repository":"ghcr.io/pact-foundation/pact-broker","tag":"2.137.0-pactbroker2.118.0"}` |
+| broker.image.repository | Pact Broker image repository | string | `"ghcr.io/pact-foundation/pact-broker"` |
+| broker.image.tag | Pact Broker image tag | string | `"2.137.0-pactbroker2.118.0"` |
 | broker.imagePullPolicy | Specify a imagePullPolicy Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent' more info [here](https://kubernetes.io/docs/user-guide/images/#pre-pulling-images)  | string | `"IfNotPresent"` |
 | broker.imagePullSecrets | Array of imagePullSecrets to allow pulling the Pact Broker image from private registries. PS: Secret's must exist in the namespace to which you deploy the Pact Broker. more info [here](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)  Example:   pullSecrets:    - mySecretName  | list | `[]` |
 | broker.labels | Additional labels that can be added to the Broker deployment | object | `{}` |
@@ -181,6 +183,10 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | serviceAccount.name | Name of the ServiceAccount If `serviceAccount.create` is `true` and `serviceAccount.name` is not set, a name is generated based on the release name. If `serviceAccount.create` is `true` and `serviceAccount.name` is set, a service account is created and named after value set in `serviceAccount.name` If `serviceAccount.create` is `false` and `serviceAccount.name` is not set, the `default` service account is used for the Deployment. If `serviceAccount.create` is `false` and `serviceAccount.name` is set, the service account specified at `serviceAccount.name` is used for the Deployment. | string | `""` |
 
 ## Configuration and Installation Details
+
+### Image Configuration
+
+> **⚠️ BREAKING CHANGE in v6.0.0:** `broker.image` is now an object with `repository` and `tag` sub-fields. The previous single-string format is still accepted for backward compatibility.
 
 ### Database Configuration
 
