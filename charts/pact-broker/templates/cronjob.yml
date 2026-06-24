@@ -16,6 +16,12 @@ spec:
     spec:
       template:
         spec:
+          {{- if .Values.broker.imagePullSecrets }}
+          imagePullSecrets:
+          {{- range .Values.broker.imagePullSecrets }}
+            - name: {{ . }}
+          {{- end }}
+          {{- end }}
           containers:
             - name: {{ template "chart.fullname" . }}-dbclean
               image: {{ template "broker.image" . }}
