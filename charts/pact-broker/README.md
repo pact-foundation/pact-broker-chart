@@ -1,6 +1,6 @@
 # pact-broker
 
-![Version: 6.3.0](https://img.shields.io/badge/Version-6.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.120.0](https://img.shields.io/badge/AppVersion-2.120.0-informational?style=flat-square)
+![Version: 6.4.0](https://img.shields.io/badge/Version-6.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.120.0](https://img.shields.io/badge/AppVersion-2.120.0-informational?style=flat-square)
 
 The Pact Broker is an application for sharing for Pact contracts and verification results.
 
@@ -164,7 +164,8 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | ingress.annotations | ingress.annotations Additional annotations for the Ingress resource | object | `{}` |
 | ingress.className | ingress.className Name of the IngressClass cluster resource which defines which controller will implement the resource (e.g nginx) | string | `""` |
 | ingress.enabled | ingress.enabled Enable the creation of the ingress resource | bool | `true` |
-| ingress.host | host Hostname to be used to expose the route to access the Pact Broker | string | `""` |
+| ingress.host | host Hostname to be used to expose the route to access the Pact Broker. Ignored if `hosts` is non-empty. | string | `""` |
+| ingress.hosts | hosts List of hostnames to expose the route to access the Pact Broker on, all routed to the same backend. Takes precedence over `host` when non-empty; useful for exposing the broker under multiple hostnames (e.g. a stable alias alongside a cluster-specific hostname). | list | `[]` |
 | ingress.tls.enabled | ingress.tls.enabled Enable TLS configuration for the host defined at `ingress.host` parameter | bool | `false` |
 | ingress.tls.secretName | ingress.tls.secretName The name to which the TLS Secret will be called | string | `""` |
 | service.annotations | service.annotations Additional annotations for the Service resource | object | `{}` |

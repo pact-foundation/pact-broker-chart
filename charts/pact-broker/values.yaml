@@ -413,8 +413,14 @@ ingress:
   # -- ingress.annotations Additional annotations for the Ingress resource
   annotations: {}
 
-  # -- host Hostname to be used to expose the route to access the Pact Broker
+  # -- host Hostname to be used to expose the route to access the Pact Broker. Ignored if `hosts` is non-empty.
   host: ""
+
+  # -- hosts List of hostnames to expose the route to access the Pact Broker on, all
+  # routed to the same backend. Takes precedence over `host` when non-empty; useful for
+  # exposing the broker under multiple hostnames (e.g. a stable alias alongside a
+  # cluster-specific hostname).
+  hosts: []
 
   # Ingress TLS parameters
   tls:
