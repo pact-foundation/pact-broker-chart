@@ -1,0 +1,15 @@
+# CI test values for the Pact Broker deployment when exposing the Ingress
+# under multiple hostnames via ingress.hosts.
+database:
+  host: "postgres.default.svc.cluster.local"
+  port: "5432"
+  adapter: "postgres"
+  databaseName: "pactbroker"
+  auth:
+    username: "pactbroker"
+    password: "pactbroker-password"
+
+ingress:
+  hosts:
+    - pact-broker.example.com
+    - pact-broker-alias.example.com
