@@ -2,7 +2,7 @@
 
 Before making a contribution to the [Pact Broker Helm Chart](https://github.com/pact-foundation/pact-broker-chart) you will need to ensure the following steps have been done:
 - [Sign your commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits)
-- Install the [helm-unittest](https://github.com/helm-unittest/helm-unittest) plugin with `helm plugin install https://github.com/helm-unittest/helm-unittest --version v1.1.2`, build the chart dependencies with `helm dependency build charts/pact-broker`, and run `helm unittest charts/pact-broker`.
+- Install the [helm-unittest](https://github.com/helm-unittest/helm-unittest) plugin with `helm plugin install https://github.com/helm-unittest/helm-unittest --version v1.0.3`, build the chart dependencies with `helm dependency build charts/pact-broker`, and run `helm unittest charts/pact-broker`.
 - Run `helm template` on the changes you're making to ensure they are correctly rendered into Kubernetes manifests.
 - List tests has been run for the Chart using the [Chart Testing](https://github.com/helm/chart-testing) tool and the `ct lint` command.
 - Ensure variables are documented in `values.yaml` and the [pre-commit](https://pre-commit.com/) hook has been run with `pre-commit run --all-files` to generate the `README.md` documentation. To preview the content, use `helm-docs --dry-run`.

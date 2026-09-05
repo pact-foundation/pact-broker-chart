@@ -28,7 +28,7 @@ jobs:
           version: v3.16.4
 
       - name: Install helm-unittest plugin
-        run: helm plugin install https://github.com/helm-unittest/helm-unittest --version v1.1.2
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest --version v1.0.3
 
       - name: Build chart dependencies
         run: helm dependency build charts/pact-broker
