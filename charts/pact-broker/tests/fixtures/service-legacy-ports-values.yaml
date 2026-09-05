@@ -1,0 +1,6 @@
+service:
+  ports:
+    http: null
+    https: null
+  port: 8080
+  httpsPort: 8443

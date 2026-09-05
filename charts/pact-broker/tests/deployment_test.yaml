@@ -49,6 +49,232 @@ tests:
             runAsUser: 1001
       - notExists:
           path: spec.template.spec.imagePullSecrets
+      - equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            limits:
+              cpu: 2500m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            failureThreshold: 3
+            httpGet:
+              path: /diagnostic/status/heartbeat
+              port: http
+            initialDelaySeconds: 300
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 5
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe
+          value:
+            failureThreshold: 3
+            httpGet:
+              path: /diagnostic/status/heartbeat
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+      - isEmpty:
+          path: spec.template.spec.containers[0].volumeMounts
+      - isEmpty:
+          path: spec.template.spec.volumes
+
+  - it: maps every configurable deployment and application setting
+    values:
+      - fixtures/deployment-all-values.yaml
+    asserts:
+      - equal:
+          path: metadata.labels.team
+          value: platform
+      - equal:
+          path: metadata.annotations["example.com/restarted-at"]
+          value: "2026-09-05"
+      - equal:
+          path: spec.template.metadata.labels.team
+          value: platform
+      - equal:
+          path: spec.template.metadata.annotations["example.com/restarted-at"]
+          value: "2026-09-05"
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: broker-runtime
+      - equal:
+          path: spec.template.spec.automountServiceAccountToken
+          value: false
+      - equal:
+          path: spec.template.spec.securityContext
+          value:
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: false
+            runAsUser: 2000
+      - equal:
+          path: spec.template.spec.containers[0].ports
+          value:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: https
+              containerPort: 8444
+              protocol: TCP
+      - equal:
+          path: spec.template.spec.containers[0].env
+          value:
+            - name: PACT_BROKER_LOG_LEVEL
+              value: debug
+            - name: PACT_BROKER_LOG_FORMAT
+              value: json
+            - name: PACT_BROKER_HTTP_DEBUG_LOGGING_ENABLED
+              value: "true"
+            - name: PACT_BROKER_HIDE_PACTFLOW_MESSAGES
+              value: "false"
+            - name: PACT_BROKER_DATABASE_ADAPTER
+              value: sqlite
+            - name: PACT_BROKER_DATABASE_HOST
+              value: postgres.example.com
+            - name: PACT_BROKER_DATABASE_PORT
+              value: "5433"
+            - name: PACT_BROKER_DATABASE_NAME
+              value: pact
+            - name: PACT_BROKER_DATABASE_USERNAME
+              value: broker
+            - name: PACT_BROKER_DATABASE_PASSWORD
+              value: database-password
+            - name: PACT_BROKER_DATABASE_SSLMODE
+              value: require
+            - name: PACT_BROKER_SQL_LOG_LEVEL
+              value: warn
+            - name: PACT_BROKER_SQL_LOG_WARN_DURATION
+              value: "9"
+            - name: PACT_BROKER_SQL_ENABLE_CALLER_LOGGING
+              value: "true"
+            - name: PACT_BROKER_DATABASE_MAX_CONNECTIONS
+              value: "20"
+            - name: PACT_BROKER_DATABASE_POOL_TIMEOUT
+              value: "10"
+            - name: PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES
+              value: "8"
+            - name: PACT_BROKER_AUTO_MIGRATE_DB
+              value: "false"
+            - name: PACT_BROKER_AUTO_MIGRATE_DB_DATA
+              value: "false"
+            - name: PACT_BROKER_ALLOW_MISSING_MIGRATION_FILES
+              value: "false"
+            - name: PACT_BROKER_DATABASE_STATEMENT_TIMEOUT
+              value: "60"
+            - name: PACT_BROKER_METRICS_SQL_STATEMENT_TIMEOUT
+              value: "90"
+            - name: PACT_BROKER_DATABASE_CONNECTION_VALIDATION_TIMEOUT
+              value: "120"
+            - name: PACT_BROKER_DATABASE_CLEAN_ENABLED
+              value: "true"
+            - name: PACT_BROKER_DATABASE_CLEAN_CRON_SCHEDULE
+              value: "0 2 * * *"
+            - name: PACT_BROKER_DATABASE_CLEAN_DELETION_LIMIT
+              value: "250"
+            - name: PACT_BROKER_DATABASE_CLEAN_OVERWRITTEN_DATA_MAX_AGE
+              value: "30"
+            - name: PACT_BROKER_DATABASE_CLEAN_KEEP_VERSION_SELECTORS
+              value: '[{"latest": true}]'
+            - name: PACT_BROKER_DATABASE_CLEAN_DRY_RUN
+              value: "true"
+            - name: PACT_BROKER_BASIC_AUTH_ENABLED
+              value: "true"
+            - name: PACT_BROKER_BASIC_AUTH_USERNAME
+              value: writer
+            - name: PACT_BROKER_BASIC_AUTH_PASSWORD
+              value: write-password
+            - name: PACT_BROKER_BASIC_AUTH_READ_ONLY_USERNAME
+              value: reader
+            - name: PACT_BROKER_BASIC_AUTH_READ_ONLY_PASSWORD
+              value: read-password
+            - name: PACT_BROKER_ALLOW_PUBLIC_READ
+              value: "true"
+            - name: PACT_BROKER_PUBLIC_HEARTBEAT
+              value: "false"
+            - name: PACT_BROKER_ENABLE_PUBLIC_BADGE_ACCESS
+              value: "true"
+            - name: PACT_BROKER_WEBHOOK_RETRY_SCHEDULE
+              value: 1 2 3
+            - name: PACT_BROKER_WEBHOOK_HTTP_METHOD_WHITELIST
+              value: POST PUT
+            - name: PACT_BROKER_WEBHOOK_HTTP_CODE_SUCCESS
+              value: 200 204
+            - name: PACT_BROKER_WEBHOOK_SCHEME_WHITELIST
+              value: https http
+            - name: PACT_BROKER_WEBHOOK_HOST_WHITELIST
+              value: example.com 10.0.0.0/8
+            - name: PACT_BROKER_DISABLE_SSL_VERIFICATION
+              value: "true"
+            - name: PACT_BROKER_PORT
+              value: "8080"
+            - name: PACT_BROKER_BASE_URL
+              value: https://broker.example.com
+            - name: PACT_BROKER_SHIELDS_IO_BASE_URL
+              value: https://shields.example.com
+            - name: PACT_BROKER_BADGE_PROVIDER_MODE
+              value: proxy
+            - name: PACT_BROKER_ENABLE_DIAGNOSTIC_ENDPOINTS
+              value: "false"
+            - name: PACT_BROKER_USE_HAL_BROWSER
+              value: "false"
+            - name: PACT_BROKER_CHECK_FOR_POTENTIAL_DUPLICATE_PACTICIPANT_NAMES
+              value: "false"
+            - name: PACT_BROKER_CREATE_DEPLOYED_VERSIONS_FOR_TAGS
+              value: "false"
+            - name: PACT_BROKER_USE_FIRST_TAG_AS_BRANCH
+              value: "false"
+            - name: PACT_BROKER_AUTO_DETECT_MAIN_BRANCH
+              value: "false"
+            - name: PACT_BROKER_MAIN_BRANCH_CANDIDATES
+              value: trunk main
+            - name: PACT_BROKER_ALLOW_DANGEROUS_CONTRACT_MODIFICATION
+              value: "true"
+            - name: PACT_BROKER_PACT_CONTENT_DIFF_TIMEOUT
+              value: "60"
+            - name: PACT_BROKER_FEATURES
+              value: feature-a feature-b
+      - equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: 250m
+              memory: 1Gi
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            failureThreshold: 4
+            httpGet:
+              path: /diagnostic/status/heartbeat
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 3
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe
+          value:
+            failureThreshold: 5
+            httpGet:
+              path: /diagnostic/status/heartbeat
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 2
 
   - it: supports image, replica, pull secret, and security context overrides
     set:
@@ -79,6 +305,31 @@ tests:
           path: spec.template.spec.securityContext
       - notExists:
           path: spec.template.spec.containers[0].securityContext
+
+  - it: supports the legacy string image setting
+    set:
+      broker.image: registry.example.com/pact-broker:legacy
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: registry.example.com/pact-broker:legacy
+
+  - it: selects the correct service account when creation is disabled
+    set:
+      serviceAccount.create: false
+    asserts:
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: default
+
+  - it: selects a named existing service account
+    set:
+      serviceAccount.create: false
+      serviceAccount.name: existing-runtime
+    asserts:
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: existing-runtime
 
   - it: uses a directly configured database password
     set:
@@ -118,6 +369,49 @@ tests:
               secretKeyRef:
                 name: pact-broker-database
                 key: password
+
+  - it: gives direct database and auth credentials precedence over secrets
+    set:
+      database.auth.password: direct-database-password
+      database.auth.existingSecret: ignored-database-secret
+      database.auth.existingSecretPasswordKey: ignored-password
+      broker.config.basicAuth.enabled: true
+      broker.config.basicAuth.writeUser.username: direct-writer
+      broker.config.basicAuth.writeUser.password: direct-write-password
+      broker.config.basicAuth.writeUser.existingSecret: ignored-write-secret
+      broker.config.basicAuth.writeUser.existingSecretUsernameKey: username
+      broker.config.basicAuth.writeUser.existingSecretPasswordKey: password
+      broker.config.basicAuth.readUser.username: direct-reader
+      broker.config.basicAuth.readUser.password: direct-read-password
+      broker.config.basicAuth.readUser.existingSecret: ignored-read-secret
+      broker.config.basicAuth.readUser.existingSecretUsernameKey: username
+      broker.config.basicAuth.readUser.existingSecretPasswordKey: password
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_PASSWORD
+            value: direct-database-password
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_BASIC_AUTH_USERNAME
+            value: direct-writer
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_BASIC_AUTH_PASSWORD
+            value: direct-write-password
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_BASIC_AUTH_READ_ONLY_USERNAME
+            value: direct-reader
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_BASIC_AUTH_READ_ONLY_PASSWORD
+            value: direct-read-password
 
   - it: adds embedded database cleanup settings only when enabled
     set:
@@ -235,6 +529,35 @@ tests:
           content:
             name: PACT_BROKER_FEATURES
             value: feature-a
+
+  - it: omits optional and embedded-cleanup environment variables by default
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_WEBHOOK_HOST_WHITELIST
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_BASE_URL
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_FEATURES
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_ENABLED
+
+  - it: leaves embedded-cleanup variables out in external mode
+    set:
+      broker.config.databaseClean.enabled: true
+      broker.config.databaseClean.mode: external
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_ENABLED
 
   - it: supports scheduling, storage, sidecars, and disabled probes
     values:

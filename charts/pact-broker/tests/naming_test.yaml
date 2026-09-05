@@ -1,0 +1,55 @@
+suite: pact broker naming helpers
+templates:
+  - service.yaml
+release:
+  name: example
+  namespace: pact-broker-system
+tests:
+  - it: combines a release name that does not contain the chart name
+    asserts:
+      - equal:
+          path: metadata.name
+          value: example-pact-broker
+      - equal:
+          path: metadata.labels.name
+          value: example-pact-broker
+      - equal:
+          path: metadata.labels["app.kubernetes.io/name"]
+          value: pact-broker
+
+  - it: applies nameOverride to resource names and application labels
+    set:
+      nameOverride: contract-broker
+    asserts:
+      - equal:
+          path: metadata.name
+          value: example-contract-broker
+      - equal:
+          path: metadata.labels.name
+          value: example-contract-broker
+      - equal:
+          path: metadata.labels["app.kubernetes.io/name"]
+          value: contract-broker
+
+  - it: gives fullnameOverride precedence over generated resource names
+    set:
+      nameOverride: contract-broker
+      fullnameOverride: custom-broker
+    asserts:
+      - equal:
+          path: metadata.name
+          value: custom-broker
+      - equal:
+          path: metadata.labels.name
+          value: custom-broker
+      - equal:
+          path: metadata.labels["app.kubernetes.io/name"]
+          value: contract-broker
+
+  - it: truncates a long fullnameOverride to a valid Kubernetes name
+    set:
+      fullnameOverride: this-is-a-very-long-pact-broker-resource-name-that-exceeds-sixty-three-characters
+    asserts:
+      - equal:
+          path: metadata.name
+          value: this-is-a-very-long-pact-broker-resource-name-that-exceeds-sixt

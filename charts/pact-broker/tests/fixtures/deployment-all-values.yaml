@@ -1,0 +1,107 @@
+broker:
+  labels:
+    team: platform
+  annotations:
+    example.com/restarted-at: "2026-09-05"
+  containerPorts:
+    http: 8080
+    https: 8444
+  podSecurityContext:
+    enabled: true
+    fsGroup: 2000
+    fsGroupChangePolicy: OnRootMismatch
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 2000
+    runAsNonRoot: false
+    allowPrivilegeEscalation: false
+  config:
+    logLevel: debug
+    logFormat: json
+    httpDebugLoggingEnabled: true
+    hidePactflowMessages: false
+    databaseSslmode: require
+    sqlLogLevel: warn
+    sqlLogWarnDuration: 9
+    sqlEnableCallerLogging: true
+    databaseMaxConnections: 20
+    databasePoolTimeout: 10
+    databaseConnectMaxRetries: 8
+    autoMigrateDb: false
+    autoMigrateDbData: false
+    allowMissingMigrationFiles: false
+    databaseStatementTimeout: 60
+    metricsSqlStatementTimeout: 90
+    databaseConnectionValidationTimeout: 120
+    basicAuth:
+      enabled: true
+      allowPublicRead: true
+      publicHeartbeat: false
+      enablePublicBadgeAccess: true
+      writeUser:
+        username: writer
+        password: write-password
+      readUser:
+        username: reader
+        password: read-password
+    webhookRetrySchedule: 1 2 3
+    webhookHttpMethodWhitelist: POST PUT
+    webhookHttpCodeSuccess: 200 204
+    webhookSchemeWhitelist: https http
+    webhookHostWhitelist: example.com 10.0.0.0/8
+    disable_ssl: true
+    baseUrl: https://broker.example.com
+    shieldsIoBaseUrl: https://shields.example.com
+    badgeProviderMode: proxy
+    enableDiagnosticEndpoints: false
+    useHalBrowser: false
+    checkForPotentialDuplicatePacticipantNames: false
+    createDeployedVersionsForTags: false
+    useFirstTagAsBranch: false
+    autoDetectMainBranch: false
+    mainBranchCandidates: trunk main
+    allowDangerousContractModification: true
+    pactContentDiffTimeout: 60
+    features: feature-a feature-b
+    databaseClean:
+      enabled: true
+      mode: embedded
+      cronSchedule: 0 2 * * *
+      deletionLimit: 250
+      overwrittenDataMaxAge: 30
+      keepVersionSelectors: '[{"latest": true}]'
+      dryRun: true
+  resources:
+    limits:
+      cpu: "1"
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 1Gi
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 20
+    timeoutSeconds: 3
+    failureThreshold: 4
+    successThreshold: 1
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 15
+    timeoutSeconds: 2
+    failureThreshold: 5
+    successThreshold: 1
+
+database:
+  host: postgres.example.com
+  port: "5433"
+  adapter: sqlite
+  databaseName: pact
+  auth:
+    username: broker
+    password: database-password
+
+serviceAccount:
+  name: broker-runtime
+  automountServiceAccountToken: false

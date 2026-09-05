@@ -10,6 +10,13 @@ tests:
       - hasDocuments:
           count: 0
 
+  - it: does not render for zero replicas
+    set:
+      broker.replicaCount: 0
+    asserts:
+      - hasDocuments:
+          count: 0
+
   - it: renders maxUnavailable for multiple replicas
     set:
       broker.replicaCount: 3
@@ -47,3 +54,37 @@ tests:
       - equal:
           path: spec.minAvailable
           value: 1
+
+  - it: supports percentage availability values
+    set:
+      broker.replicaCount: 3
+      broker.podDisruptionBudget.maxUnavailable: null
+      broker.podDisruptionBudget.minAvailable: 50%
+    asserts:
+      - equal:
+          path: spec.minAvailable
+          value: 50%
+
+  - it: renders both constraints when both are configured
+    set:
+      broker.replicaCount: 3
+      broker.podDisruptionBudget.maxUnavailable: 1
+      broker.podDisruptionBudget.minAvailable: 2
+    asserts:
+      - equal:
+          path: spec.maxUnavailable
+          value: 1
+      - equal:
+          path: spec.minAvailable
+          value: 2
+
+  - it: omits zero-valued constraints
+    set:
+      broker.replicaCount: 2
+      broker.podDisruptionBudget.maxUnavailable: 0
+      broker.podDisruptionBudget.minAvailable: 0
+    asserts:
+      - notExists:
+          path: spec.maxUnavailable
+      - notExists:
+          path: spec.minAvailable

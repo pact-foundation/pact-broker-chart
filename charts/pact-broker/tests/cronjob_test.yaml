@@ -49,8 +49,26 @@ tests:
           value:
             - clean
       - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: ghcr.io/pact-foundation/pact-broker:2.142.0-pactbroker2.120.0
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].imagePullPolicy
+          value: IfNotPresent
+      - equal:
           path: spec.jobTemplate.spec.template.spec.restartPolicy
           value: Never
+      - notExists:
+          path: spec.jobTemplate.spec.template.spec.imagePullSecrets
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_LOG_LEVEL
+            value: info
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_PASSWORD
+            value: database-password
       - contains:
           path: spec.jobTemplate.spec.template.spec.containers[0].env
           content:
@@ -66,6 +84,11 @@ tests:
           content:
             name: PACT_BROKER_DATABASE_CLEAN_DRY_RUN
             value: "true"
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_KEEP_VERSION_SELECTORS
+            value: '[{"latest": true}, { "max_age": 180 }]'
 
   - it: uses image pull secrets and an existing database secret
     set:
@@ -86,3 +109,41 @@ tests:
               secretKeyRef:
                 name: pact-broker-database
                 key: password
+
+  - it: applies image and logging overrides
+    set:
+      broker.config.databaseClean.enabled: true
+      broker.config.databaseClean.mode: external
+      broker.image: registry.example.com/pact-broker:legacy
+      broker.imagePullPolicy: Always
+      broker.config.logLevel: debug
+      broker.config.logFormat: json
+      broker.config.httpDebugLoggingEnabled: true
+      broker.config.hidePactflowMessages: false
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: registry.example.com/pact-broker:legacy
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_LOG_LEVEL
+            value: debug
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_LOG_FORMAT
+            value: json
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_HTTP_DEBUG_LOGGING_ENABLED
+            value: "true"
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_HIDE_PACTFLOW_MESSAGES
+            value: "false"
