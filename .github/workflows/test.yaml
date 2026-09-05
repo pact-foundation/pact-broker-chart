@@ -22,6 +22,17 @@ jobs:
       - name: Setup helm-docs
         run: go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
 
+      - name: Set up Helm
+        uses: azure/setup-helm@v5.0.1 # pin@v5.0.1
+        with:
+          version: v3.16.4
+
+      - name: Install helm-unittest plugin
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest --version v1.1.2
+
+      - name: Build chart dependencies
+        run: helm dependency build charts/pact-broker
+
       - name: Run pre-commit
         uses: pre-commit/action@1b06ec171f2f6faa71ed760c4042bd969e4f8b43 # pin@v3.0.1
 

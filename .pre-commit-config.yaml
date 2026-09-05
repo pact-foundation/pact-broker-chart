@@ -10,3 +10,11 @@ repos:
           - --template-files=./_templates.gotmpl
           # A base filename makes it relative to each chart directory found
           - --template-files=README.md.gotmpl
+  - repo: local
+    hooks:
+      - id: helm-unittest
+        name: helm-unittest
+        entry: helm unittest charts/pact-broker
+        language: system
+        files: ^charts/pact-broker/
+        pass_filenames: false

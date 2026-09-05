@@ -1,0 +1,88 @@
+suite: pact broker database cleanup cronjob
+templates:
+  - cronjob.yml
+release:
+  name: pact-broker
+  namespace: pact-broker-system
+tests:
+  - it: does not render when database cleanup is disabled
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render for embedded database cleanup
+    set:
+      broker.config.databaseClean.enabled: true
+      broker.config.databaseClean.mode: embedded
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders external database cleanup settings
+    set:
+      broker.config.databaseClean.enabled: true
+      broker.config.databaseClean.mode: external
+      broker.config.databaseClean.cronSchedule: "0 2 * * *"
+      broker.config.databaseClean.deletionLimit: 250
+      broker.config.databaseClean.overwrittenDataMaxAge: 30
+      broker.config.databaseClean.dryRun: true
+      database.auth.password: database-password
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+      - equal:
+          path: metadata.name
+          value: pact-broker-dbclean
+      - equal:
+          path: metadata.namespace
+          value: pact-broker-system
+      - equal:
+          path: spec.schedule
+          value: "0 2 * * *"
+      - equal:
+          path: spec.concurrencyPolicy
+          value: Forbid
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].command
+          value:
+            - clean
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: Never
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_DELETION_LIMIT
+            value: "250"
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_OVERWRITTEN_DATA_MAX_AGE
+            value: "30"
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_DRY_RUN
+            value: "true"
+
+  - it: uses image pull secrets and an existing database secret
+    set:
+      broker.config.databaseClean.enabled: true
+      broker.config.databaseClean.mode: external
+      broker.imagePullSecrets[0]: registry-credentials
+      database.auth.existingSecret: pact-broker-database
+      database.auth.existingSecretPasswordKey: password
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.imagePullSecrets[0].name
+          value: registry-credentials
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pact-broker-database
+                key: password

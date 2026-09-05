@@ -1,0 +1,8 @@
+ingress:
+  host: ignored.example.com
+  hosts:
+    - broker.example.com
+    - broker-alias.example.com
+  tls:
+    enabled: true
+    secretName: broker-tls
