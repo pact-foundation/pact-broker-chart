@@ -1,0 +1,149 @@
+suite: pact broker database cleanup cronjob
+templates:
+  - cronjob.yml
+release:
+  name: pact-broker
+  namespace: pact-broker-system
+tests:
+  - it: does not render when database cleanup is disabled
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: does not render for embedded database cleanup
+    set:
+      broker.config.databaseClean.enabled: true
+      broker.config.databaseClean.mode: embedded
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders external database cleanup settings
+    set:
+      broker.config.databaseClean.enabled: true
+      broker.config.databaseClean.mode: external
+      broker.config.databaseClean.cronSchedule: "0 2 * * *"
+      broker.config.databaseClean.deletionLimit: 250
+      broker.config.databaseClean.overwrittenDataMaxAge: 30
+      broker.config.databaseClean.dryRun: true
+      database.auth.password: database-password
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: CronJob
+      - equal:
+          path: metadata.name
+          value: pact-broker-dbclean
+      - equal:
+          path: metadata.namespace
+          value: pact-broker-system
+      - equal:
+          path: spec.schedule
+          value: "0 2 * * *"
+      - equal:
+          path: spec.concurrencyPolicy
+          value: Forbid
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].command
+          value:
+            - clean
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: ghcr.io/pact-foundation/pact-broker:2.142.0-pactbroker2.120.0
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].imagePullPolicy
+          value: IfNotPresent
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: Never
+      - notExists:
+          path: spec.jobTemplate.spec.template.spec.imagePullSecrets
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_LOG_LEVEL
+            value: info
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_PASSWORD
+            value: database-password
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_DELETION_LIMIT
+            value: "250"
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_OVERWRITTEN_DATA_MAX_AGE
+            value: "30"
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_DRY_RUN
+            value: "true"
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_CLEAN_KEEP_VERSION_SELECTORS
+            value: '[{"latest": true}, { "max_age": 180 }]'
+
+  - it: uses image pull secrets and an existing database secret
+    set:
+      broker.config.databaseClean.enabled: true
+      broker.config.databaseClean.mode: external
+      broker.imagePullSecrets[0]: registry-credentials
+      database.auth.existingSecret: pact-broker-database
+      database.auth.existingSecretPasswordKey: password
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.imagePullSecrets[0].name
+          value: registry-credentials
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pact-broker-database
+                key: password
+
+  - it: applies image and logging overrides
+    set:
+      broker.config.databaseClean.enabled: true
+      broker.config.databaseClean.mode: external
+      broker.image: registry.example.com/pact-broker:legacy
+      broker.imagePullPolicy: Always
+      broker.config.logLevel: debug
+      broker.config.logFormat: json
+      broker.config.httpDebugLoggingEnabled: true
+      broker.config.hidePactflowMessages: false
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].image
+          value: registry.example.com/pact-broker:legacy
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_LOG_LEVEL
+            value: debug
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_LOG_FORMAT
+            value: json
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_HTTP_DEBUG_LOGGING_ENABLED
+            value: "true"
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers[0].env
+          content:
+            name: PACT_BROKER_HIDE_PACTFLOW_MESSAGES
+            value: "false"

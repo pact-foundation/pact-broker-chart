@@ -1,0 +1,18 @@
+commonLabels:
+  company: pact
+commonAnnotations:
+  common.example.com/release: '{{ .Release.Name }}'
+
+broker:
+  labels:
+    team: platform
+  annotations:
+    deployment.example.com/release: pact-broker
+
+service:
+  annotations:
+    service.example.com/release: '{{ .Release.Name }}'
+
+ingress:
+  annotations:
+    ingress.example.com/release: '{{ .Release.Name }}'

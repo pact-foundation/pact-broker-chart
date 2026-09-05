@@ -1,0 +1,26 @@
+broker:
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+  nodeSelector:
+    kubernetes.io/os: linux
+  tolerations:
+    - key: dedicated
+      operator: Exists
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: zone
+                operator: Exists
+  volumes:
+    - name: cache
+      emptyDir: {}
+  volumeMounts:
+    - name: cache
+      mountPath: /cache
+  extraContainers:
+    - name: sidecar
+      image: busybox:1.36

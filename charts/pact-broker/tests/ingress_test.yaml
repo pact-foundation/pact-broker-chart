@@ -1,0 +1,112 @@
+suite: pact broker ingress
+templates:
+  - ingress.yaml
+release:
+  name: pact-broker
+  namespace: pact-broker-system
+tests:
+  - it: renders the default ingress
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Ingress
+      - equal:
+          path: metadata.name
+          value: pact-broker
+      - equal:
+          path: metadata.namespace
+          value: pact-broker-system
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service
+          value:
+            name: pact-broker
+            port:
+              number: 80
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: Prefix
+      - notExists:
+          path: spec.tls
+      - notExists:
+          path: spec.ingressClassName
+      - isEmpty:
+          path: metadata.annotations
+
+  - it: does not render when ingress is disabled
+    set:
+      ingress.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: configures a single host, class, and TLS
+    set:
+      ingress.host: broker.example.com
+      ingress.className: nginx
+      ingress.tls.enabled: true
+      ingress.tls.secretName: broker-tls
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: nginx
+      - equal:
+          path: spec.rules[0].host
+          value: broker.example.com
+      - equal:
+          path: spec.tls[0]
+          value:
+            hosts:
+              - broker.example.com
+            secretName: broker-tls
+
+  - it: propagates common labels and rendered annotations
+    values:
+      - fixtures/metadata-values.yaml
+    asserts:
+      - equal:
+          path: metadata.labels["app.kubernetes.io/component"]
+          value: pact-broker
+      - equal:
+          path: metadata.labels.company
+          value: pact
+      - equal:
+          path: metadata.annotations["ingress.example.com/release"]
+          value: pact-broker
+      - equal:
+          path: metadata.annotations["common.example.com/release"]
+          value: pact-broker
+
+  - it: routes to a customized HTTP service port
+    set:
+      ingress.host: broker.example.com
+      service.ports.http: 8080
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 8080
+
+  - it: gives multiple hosts precedence over the legacy host
+    values:
+      - fixtures/ingress-multiple-hosts-values.yaml
+    asserts:
+      - lengthEqual:
+          path: spec.rules
+          count: 2
+      - equal:
+          path: spec.rules[0].host
+          value: broker.example.com
+      - equal:
+          path: spec.rules[1].host
+          value: broker-alias.example.com
+      - equal:
+          path: spec.rules[1].http.paths[0].backend.service.name
+          value: pact-broker
+      - equal:
+          path: spec.tls[0].hosts
+          value:
+            - broker.example.com
+            - broker-alias.example.com
