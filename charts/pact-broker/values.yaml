@@ -6,7 +6,7 @@ broker:
     # -- Pact Broker image repository
     repository: ghcr.io/pact-foundation/pact-broker
     # -- Pact Broker image tag
-    tag: 2.142.0-pactbroker2.120.0
+    tag: 2.143.0-pactbroker2.121.0-debian
 
   # -- Specify a imagePullPolicy
   # Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
