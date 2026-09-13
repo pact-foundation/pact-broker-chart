@@ -26,7 +26,7 @@ tests:
           value: pact-broker
       - equal:
           path: spec.template.spec.containers[0].image
-          value: ghcr.io/pact-foundation/pact-broker:2.142.0-pactbroker2.120.0
+          value: ghcr.io/pact-foundation/pact-broker:2.143.0-pactbroker2.121.0
       - equal:
           path: spec.template.spec.containers[0].ports[0]
           value:
