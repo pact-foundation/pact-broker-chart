@@ -1,8 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:best-practices"
   ],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "rebaseWhen": "conflicted",
+  "automerge": true,
   "packageRules": [
     {
       "description": "Configure versioning for Pact Broker Docker image",
@@ -23,9 +27,10 @@
         "charts/pact-broker/values\\.yaml"
       ],
       "matchStrings": [
-        "repository:\\s*(?<depName>ghcr\\.io/pact-foundation/pact-broker)\\s*\\n(?:\\s*#.*\\n)*\\s*tag:\\s*(?<currentValue>[^\\s]+)"
+        "image: ghcr\\.io/pact-foundation/pact-broker:(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+-pactbroker[0-9]+\\.[0-9]+\\.[0-9]+)"
       ],
       "datasourceTemplate": "docker",
+      "packageNameTemplate": "ghcr.io/pact-foundation/pact-broker",
       "versioningTemplate": "loose"
     }
   ]
