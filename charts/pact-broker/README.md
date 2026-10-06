@@ -122,9 +122,9 @@ helm upgrade -i <release_name> oci://ghcr.io/pact-foundation/pact-broker-chart/p
 | broker.containerSecurityContext.runAsNonRoot | Set Pact Broker container's Security Context runAsNonRoot | bool | `true` |
 | broker.containerSecurityContext.runAsUser | Set Pact Broker container's Security Context runAsUser | int | `1001` |
 | broker.extraContainers | Additional containers to add to the Pact Broker pods | list | `[]` |
-| broker.image | Pact Broker image configuration | object | `{"repository":"ghcr.io/pact-foundation/pact-broker","tag":"3.0.0-pactbroker2.121.2"}` |
+| broker.image | Pact Broker image configuration | object | `{"repository":"ghcr.io/pact-foundation/pact-broker","tag":"3.0.0-pactbroker2.121.2@sha256:420341d4fbfb00a621c313f47e530ad75703f969bbc7520d0d72bc71bb53cef9"}` |
 | broker.image.repository | Pact Broker image repository | string | `"ghcr.io/pact-foundation/pact-broker"` |
-| broker.image.tag | Pact Broker image tag | string | `"3.0.0-pactbroker2.121.2"` |
+| broker.image.tag | Pact Broker image tag | string | `"3.0.0-pactbroker2.121.2@sha256:420341d4fbfb00a621c313f47e530ad75703f969bbc7520d0d72bc71bb53cef9"` |
 | broker.imagePullPolicy | Specify a imagePullPolicy Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent' more info [here](https://kubernetes.io/docs/user-guide/images/#pre-pulling-images)  | string | `"IfNotPresent"` |
 | broker.imagePullSecrets | Array of imagePullSecrets to allow pulling the Pact Broker image from private registries. PS: Secret's must exist in the namespace to which you deploy the Pact Broker. more info [here](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)  Example:   pullSecrets:    - mySecretName  | list | `[]` |
 | broker.labels | Additional labels that can be added to the Broker deployment | object | `{}` |
