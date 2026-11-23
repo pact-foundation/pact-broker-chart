@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Codespell
-        uses: codespell-project/actions-codespell@7a64013caa0f0380e61c5d9c66b25d82b3ae6f18 # master
+        uses: codespell-project/actions-codespell@9943f5032e15e8c80f44b1196bdb4b85414d6e23 # master
         with:
           skip: .git
           check_filenames: true
