@@ -9,14 +9,15 @@
   "automerge": true,
   "packageRules": [
     {
-      "description": "Configure versioning for Pact Broker Docker image",
+      "description": "Configure versioning for Pact Broker Docker image and keep the default Alpine variant",
       "matchPackageNames": [
         "ghcr.io/pact-foundation/pact-broker"
       ],
       "matchDatasources": [
         "docker"
       ],
-      "versioning": "loose"
+      "versioning": "loose",
+      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+-pactbroker[0-9]+\\.[0-9]+\\.[0-9]+$/"
     }
   ],
   "customManagers": [
