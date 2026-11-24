@@ -50,7 +50,7 @@ tests:
             - clean
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
-          value: ghcr.io/pact-foundation/pact-broker:3.0.0-pactbroker2.121.2@sha256:420341d4fbfb00a621c313f47e530ad75703f969bbc7520d0d72bc71bb53cef9
+          value: ghcr.io/pact-foundation/pact-broker:3.2.0-pactbroker2.124.0@sha256:b5b9af2e571e2f6a2f9e2ebe85f0e09158ae5e707349d5afce66bfc7cb7437a5
       - equal:
           path: spec.jobTemplate.spec.template.spec.containers[0].imagePullPolicy
           value: IfNotPresent

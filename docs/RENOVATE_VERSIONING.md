@@ -38,6 +38,8 @@ We've configured Renovate to use **"loose" versioning** instead of strict regex 
 2. **Natural Ordering**: It understands that `2.125.0-pactbroker2.113.0` > `2.124.0-pactbroker2.112.0`
 3. **Handles Both Components**: Properly compares the full version string
 
+The package rule also restricts updates to tags in the form `3.2.0-pactbroker2.124.0`, which use the default Alpine image. The Debian variant has different filesystem permissions and cannot run with the chart's default `runAsUser: 1001`. Keeping the image variant unchanged prevents an image update from introducing that incompatibility.
+
 ### Configuration
 
 ```json
@@ -49,7 +51,8 @@ We've configured Renovate to use **"loose" versioning** instead of strict regex 
         "ghcr.io/pact-foundation/pact-broker"
       ],
       "matchDatasources": ["docker"],
-      "versioning": "loose"  // ← Key change: using "loose" instead of regex
+      "versioning": "loose",
+      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+-pactbroker[0-9]+\\.[0-9]+\\.[0-9]+$/"
     }
   ],
   "customManagers": [
